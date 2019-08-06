@@ -1,0 +1,8 @@
+# Ignore .DS_Store
+.DS_Store
+
+# Ignore Python byte code
+*.pyc
+
+# Ignore VSCode directories
+.vscode/*

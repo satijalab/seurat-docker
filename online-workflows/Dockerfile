@@ -43,4 +43,9 @@ RUN R --slave --no-restore --no-save -e "BiocManager::install(c('pcaMethods', 's
 # Install python dependencies
 RUN pip3 install scanpy
 
+# Install FIt-sne
+RUN apt-get install -y libfftw3-dev
+RUN git clone https://github.com/KlugerLab/FIt-SNE.git
+RUN g++ -std=c++11 -O3 FIt-SNE/src/sptree.cpp FIt-SNE/src/tsne.cpp FIt-SNE/src/nbodyfft.cpp  -o bin/fast_tsne -pthread -lfftw3 -lm
+
 CMD [ "R" ]

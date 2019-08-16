@@ -31,7 +31,7 @@ RUN R --slave --no-restore --no-save -e "install.packages(c('rmarkdown', 'devtoo
 
 # Install LoomR
 
-RUN  R --slave --no-restore --no-save -e "install.packages('loomR', repos = c(getOption('repos'), 'https://mojaveazure.github.io/loomR'))"
+RUN  R --slave --no-restore --no-save -e "devtools::install_github('mojaveazure/loomR', ref = 'develop')"
 
 # Install Bioconductor dependencies 
 

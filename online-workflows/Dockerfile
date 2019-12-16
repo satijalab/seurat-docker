@@ -1,6 +1,6 @@
 # Dockerfile for use with the CI of seurat-wrappers
 
-FROM satijalab/seurat:latest
+FROM satijalab/seurat:3.1.2
 
 # Install system dependencies
 RUN apt-get update
@@ -15,6 +15,8 @@ RUN echo "options(repos = 'https://cloud.r-project.org')" > $(R --slave --no-res
 RUN R --slave --no-restore --no-save -e "install.packages(c('rmarkdown', 'devtools', 'dplyr', \
     'testthat', 'hdf5r', 'roxygen2', 'VGAM'))"
 
+RUN R --slave --no-restore --no-save -e "devtools::install_github('sjessa/ggmin')"
+
 # Install LoomR
 
 RUN  R --slave --no-restore --no-save -e "devtools::install_github('mojaveazure/loomR', ref = 'develop')"
@@ -27,6 +29,7 @@ RUN R --slave --no-restore --no-save -e "BiocManager::install(c('pcaMethods', 's
 'IRanges', 'rtracklayer', 'monocle', 'Biobase', 'VGAM', 'scater'))"
 
 # Install python dependencies
+RUN apt-get install -y python3-tables
 RUN pip3 install scanpy
 
 # Download vignette data
@@ -36,7 +39,7 @@ RUN rm data/all_vignette_files.tar.gz
 RUN chmod -R a+rwx data/
 
 # Get SeuratData
-RUN R --slave --no-restore --no-save -e "remotes::install_github('satijalab/seurat-data', dependencies = FALSE,  INSTALL_opts = '--no-test-load')"
+RUN R --slave --no-restore --no-save -e "remotes::install_github('satijalab/seurat-data',  INSTALL_opts = '--no-test-load')"
 RUN R --slave --no-restore --no-save -e "options(SeuratData.repo.use = 'satijalab04.nygenome.org'); SeuratData::InstallData(c('hcabm40k', 'ifnb', 'panc8', 'pbmcsca'))"
 
 CMD [ "R" ]

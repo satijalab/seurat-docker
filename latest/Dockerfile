@@ -1,4 +1,4 @@
-# Dockerfile for the latest version of Seurat (v3.1.0)
+# Dockerfile for the latest version of Seurat (v3.1.2)
 FROM rstudio/r-base:3.6.1-xenial
 
 # Set global R options
@@ -26,6 +26,10 @@ RUN pip3 install umap-learn
 # Install FIt-SNE
 RUN git clone https://github.com/KlugerLab/FIt-SNE.git
 RUN g++ -std=c++11 -O3 FIt-SNE/src/sptree.cpp FIt-SNE/src/tsne.cpp FIt-SNE/src/nbodyfft.cpp  -o bin/fast_tsne -pthread -lfftw3 -lm
+
+# Install bioconductor dependencies
+RUN R --slave --no-restore --no-save -e "install.packages('BiocManager')"
+RUN R --slave --no-restore --no-save -e "BiocManager::install('multtest')"
 
 # Install Seurat
 RUN R --slave --no-restore --no-save -e "install.packages('Seurat')"

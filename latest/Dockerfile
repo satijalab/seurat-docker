@@ -31,6 +31,9 @@ RUN g++ -std=c++11 -O3 FIt-SNE/src/sptree.cpp FIt-SNE/src/tsne.cpp FIt-SNE/src/n
 RUN R --slave --no-restore --no-save -e "install.packages('BiocManager')"
 RUN R --slave --no-restore --no-save -e "BiocManager::install('multtest')"
 
+# Install hdf5r
+RUN R --slave --no-restore --no-save -e "install.packages('hdf5r')"
+
 # Install Seurat
 RUN R --slave --no-restore --no-save -e "install.packages('Seurat')"
 

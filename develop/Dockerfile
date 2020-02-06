@@ -30,12 +30,18 @@ RUN g++ -std=c++11 -O3 FIt-SNE/src/sptree.cpp FIt-SNE/src/tsne.cpp FIt-SNE/src/n
 # Install bioconductor dependencies
 RUN R --slave --no-restore --no-save -e "install.packages('BiocManager')"
 RUN R --slave --no-restore --no-save -e "BiocManager::install('multtest')"
+RUN R --slave --no-restore --no-save -e "BiocManager::install(c('pcaMethods', 'scran', 'S4Vectors', \
+'SummarizedExperiment', 'SingleCellExperiment', 'MAST', 'DESeq2', 'GenomicRanges', 'GenomeInfoDb', \
+'IRanges', 'rtracklayer', 'monocle', 'Biobase', 'VGAM', 'scater'))"
 
 # Install hdf5r
 RUN R --slave --no-restore --no-save -e "install.packages('hdf5r')"
 
 # Install new develop R dependencies
-RUN R --slave --no-restore --no-save -e "install.packages('patchwork')"
+RUN R --slave --no-restore --no-save -e "install.packages(c('patchwork', 'testthat', 'devtools'))"
+
+# Install loomR
+RUN R --slave --no-restore --no-save -e "devtools::install_github('mojaveazure/loomR', ref = 'develop')"
 
 # Install Seurat
 RUN R --slave --no-restore --no-save -e "install.packages('Seurat')"

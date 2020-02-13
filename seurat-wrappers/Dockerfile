@@ -1,5 +1,4 @@
 # Dockerfile for use with the CI of seurat-wrappers
-
 FROM satijalab/seurat:latest
 
 # Install system dependencies

@@ -1,6 +1,5 @@
 # Dockerfile for use with the CI of seurat-wrappers
-
-FROM satijalab/seurat:3.1.2
+FROM satijalab/seurat:3.1.3
 
 # Install system dependencies
 RUN apt-get update

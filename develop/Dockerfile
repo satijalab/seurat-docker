@@ -1,5 +1,5 @@
-# Dockerfile for the latest version of Seurat (v3.1.2)
-FROM rstudio/r-base:3.6.1-xenial
+# Dockerfile for the latest version of Seurat (v3.1.3)
+FROM rstudio/r-base:3.6.2-bionic
 
 # Set global R options
 RUN echo "options(repos = 'https://cloud.r-project.org')" > $(R --slave --no-restore --no-save -e "cat(Sys.getenv('R_HOME'))")/etc/Rprofile.site
@@ -39,6 +39,7 @@ RUN R --slave --no-restore --no-save -e "install.packages('hdf5r')"
 
 # Install new develop R dependencies
 RUN R --slave --no-restore --no-save -e "install.packages(c('patchwork', 'testthat', 'devtools'))"
+RUN R --slave --no-restore --no-save -e "devtools::install_version('SDMTools', version = '1.1-221.2', repos = 'http://cran.us.r-project.org')"
 
 # Install loomR
 RUN R --slave --no-restore --no-save -e "devtools::install_github('mojaveazure/loomR', ref = 'develop')"

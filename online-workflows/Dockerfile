@@ -1,5 +1,5 @@
 # Dockerfile for use with the CI of seurat-wrappers
-FROM satijalab/seurat:3.1.3
+FROM satijalab/seurat:3.1.4
 
 # Install system dependencies
 RUN apt-get update
@@ -11,9 +11,7 @@ RUN echo "options(repos = 'https://cloud.r-project.org')" > $(R --slave --no-res
 
 # Install R packages
 
-RUN R --slave --no-restore --no-save -e "install.packages(c('rmarkdown', 'devtools', 'dplyr', \
-    'testthat', 'hdf5r', 'roxygen2', 'VGAM'))"
-
+RUN R --slave --no-restore --no-save -e "install.packages(c('rmarkdown', 'devtools', 'dplyr', 'testthat', 'roxygen2'))"
 RUN R --slave --no-restore --no-save -e "devtools::install_github('sjessa/ggmin')"
 
 # Install LoomR
@@ -23,9 +21,7 @@ RUN  R --slave --no-restore --no-save -e "devtools::install_github('mojaveazure/
 # Install Bioconductor dependencies 
 
 RUN R --slave --no-restore --no-save -e "install.packages('BiocManager')"
-RUN R --slave --no-restore --no-save -e "BiocManager::install(c('pcaMethods', 'scran', 'S4Vectors', \
-'SummarizedExperiment', 'SingleCellExperiment', 'MAST', 'DESeq2', 'GenomicRanges', 'GenomeInfoDb', \
-'IRanges', 'rtracklayer', 'monocle', 'Biobase', 'VGAM', 'scater'))"
+RUN R --slave --no-restore --no-save -e "BiocManager::install(c('pcaMethods', 'scran', 'scater'))"
 
 # Install python dependencies
 RUN apt-get install -y python3-tables

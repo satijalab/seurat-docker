@@ -1,5 +1,5 @@
-# Dockerfile for the latest version of Seurat (v3.1.4)
-FROM rstudio/r-base:3.6.2-bionic
+# Dockerfile for the latest version of Seurat (v3.1.5)
+FROM rstudio/r-base:3.6.3-bionic
 
 # Set global R options
 RUN echo "options(repos = 'https://cloud.r-project.org')" > $(R --slave --no-restore --no-save -e "cat(Sys.getenv('R_HOME'))")/etc/Rprofile.site
@@ -24,7 +24,7 @@ RUN apt-get install -y \
 RUN pip3 install umap-learn
 
 # Install FIt-SNE
-RUN git clone https://github.com/KlugerLab/FIt-SNE.git
+RUN git clone --branch v1.1.0 https://github.com/KlugerLab/FIt-SNE.git
 RUN g++ -std=c++11 -O3 FIt-SNE/src/sptree.cpp FIt-SNE/src/tsne.cpp FIt-SNE/src/nbodyfft.cpp  -o bin/fast_tsne -pthread -lfftw3 -lm
 
 # Install bioconductor dependencies & suggests
@@ -32,7 +32,8 @@ RUN R --slave --no-restore --no-save -e "install.packages('BiocManager')"
 RUN R --slave --no-restore --no-save -e "BiocManager::install(c('multtest', 'S4Vectors', 'SummarizedExperiment', 'SingleCellExperiment', 'MAST', 'DESeq2', 'BiocGenerics', 'GenomicRanges', 'IRanges', 'rtracklayer', 'monocle', 'Biobase'))"
 
 # Install CRAN suggests
-RUN R --slave --no-restore --no-save -e "install.packages('VGAM')"
+RUN R --slave --no-restore --no-save -e "install.packages(c('VGAM', 'R.utils', 'metap'))"
+RUN R --slave --no-restore --no-save -e "install.packages('https://cran.rstudio.com//src/contrib/Archive/SDMTools/SDMTools_1.1-221.2.tar.gz', repos = NULL)"
 
 # Install hdf5r
 RUN R --slave --no-restore --no-save -e "install.packages('hdf5r')"

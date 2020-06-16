@@ -1,5 +1,5 @@
-# Dockerfile for the latest version of Seurat (v3.1.4)
-FROM rstudio/r-base:3.6.3-bionic
+# Dockerfile for the latest version of Seurat (v3.1.5)
+FROM rstudio/r-base:4.0.0-bionic
 ENV DEBIAN_FRONTEND noninteractive
 
 # Set global R options
@@ -40,15 +40,7 @@ RUN R --slave --no-restore --no-save -e "BiocManager::install(c('pcaMethods', 's
 RUN R --slave --no-restore --no-save -e "install.packages('hdf5r')"
 
 # Install new develop R dependencies
-RUN R --slave --no-restore --no-save -e "install.packages(c('patchwork', 'testthat', 'devtools', 'tinytex'))"
-RUN echo "if (requireNamespace('tinytex', quietly = TRUE)) { \n"\
-    "sep <- .Platform[['path.sep']] \n"\
-    "tex.bin <- tinytex::tinytex_root() \n"\
-    "tex.bin <- list.dirs(path = file.path(tex.bin, 'bin')) \n"\
-    "tex.bin <- paste(tex.bin, collapse = sep) \n"\
-    "Sys.setenv(PATH = paste(tex.bin, Sys.getenv('PATH'), sep = sep)) \n"\
-    "}"\ 
-    >> $(R --slave --no-restore --no-save -e "cat(Sys.getenv('R_HOME'))")/etc/Rprofile.site
+RUN R --slave --no-restore --no-save -e "install.packages(c('patchwork', 'testthat', 'devtools', 'shiny', 'miniUI', 'metap'))"
 RUN R --slave --no-restore --no-save -e "devtools::install_version('SDMTools', version = '1.1-221.2', repos = 'http://cran.us.r-project.org')"
 
 # Install loomR

@@ -1,5 +1,5 @@
 # Dockerfile for the latest version of Seurat (v3.1.5)
-FROM rstudio/r-base:3.6.3-bionic
+FROM rstudio/r-base:4.0.0-bionic
 
 # Set global R options
 RUN echo "options(repos = 'https://cloud.r-project.org')" > $(R --slave --no-restore --no-save -e "cat(Sys.getenv('R_HOME'))")/etc/Rprofile.site

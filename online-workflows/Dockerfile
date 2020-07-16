@@ -1,5 +1,5 @@
 # Dockerfile for use with the CI of seurat-wrappers
-FROM satijalab/seurat:3.1.5
+FROM satijalab/seurat:3.2.0
 
 # Install system dependencies
 RUN apt-get update
@@ -10,17 +10,13 @@ RUN apt-get install -y \
 RUN echo "options(repos = 'https://cloud.r-project.org')" > $(R --slave --no-restore --no-save -e "cat(Sys.getenv('R_HOME'))")/etc/Rprofile.site
 
 # Install R packages
-
-RUN R --slave --no-restore --no-save -e "install.packages(c('rmarkdown', 'devtools', 'dplyr', 'testthat', 'roxygen2'))"
+RUN R --slave --no-restore --no-save -e "install.packages(c('rmarkdown', 'devtools', 'dplyr', 'testthat', 'roxygen2', 'htmltools', 'vembedr'))"
 RUN R --slave --no-restore --no-save -e "devtools::install_github('sjessa/ggmin')"
 
 # Install LoomR
-
 RUN  R --slave --no-restore --no-save -e "devtools::install_github('mojaveazure/loomR', ref = 'develop')"
 
 # Install Bioconductor dependencies 
-
-RUN R --slave --no-restore --no-save -e "install.packages('BiocManager')"
 RUN R --slave --no-restore --no-save -e "BiocManager::install(c('pcaMethods', 'scran', 'scater'))"
 
 # Install python dependencies
@@ -35,6 +31,6 @@ RUN chmod -R a+rwx data/
 
 # Get SeuratData
 RUN R --slave --no-restore --no-save -e "remotes::install_github('satijalab/seurat-data',  INSTALL_opts = '--no-test-load')"
-RUN R --slave --no-restore --no-save -e "options(SeuratData.repo.use = 'satijalab04.nygenome.org'); SeuratData::InstallData(c('hcabm40k', 'ifnb', 'panc8', 'pbmcsca'))"
+RUN R --slave --no-restore --no-save -e "options(SeuratData.repo.use = 'satijalab04.nygenome.org'); SeuratData::InstallData(c('hcabm40k', 'ifnb', 'panc8', 'pbmcsca', 'stxBrain', 'ssHippo', 'pbmc3k'))"
 
 CMD [ "R" ]

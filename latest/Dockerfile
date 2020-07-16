@@ -1,5 +1,5 @@
-# Dockerfile for the latest version of Seurat (v3.1.5)
-FROM rstudio/r-base:3.6.3-bionic
+# Dockerfile for the latest version of Seurat (v3.2.0)
+FROM rstudio/r-base:4.0.2-bionic
 
 # Set global R options
 RUN echo "options(repos = 'https://cloud.r-project.org')" > $(R --slave --no-restore --no-save -e "cat(Sys.getenv('R_HOME'))")/etc/Rprofile.site
@@ -29,11 +29,10 @@ RUN g++ -std=c++11 -O3 FIt-SNE/src/sptree.cpp FIt-SNE/src/tsne.cpp FIt-SNE/src/n
 
 # Install bioconductor dependencies & suggests
 RUN R --slave --no-restore --no-save -e "install.packages('BiocManager')"
-RUN R --slave --no-restore --no-save -e "BiocManager::install(c('multtest', 'S4Vectors', 'SummarizedExperiment', 'SingleCellExperiment', 'MAST', 'DESeq2', 'BiocGenerics', 'GenomicRanges', 'IRanges', 'rtracklayer', 'monocle', 'Biobase'))"
+RUN R --slave --no-restore --no-save -e "BiocManager::install(c('multtest', 'S4Vectors', 'SummarizedExperiment', 'SingleCellExperiment', 'MAST', 'DESeq2', 'BiocGenerics', 'GenomicRanges', 'IRanges', 'rtracklayer', 'monocle', 'Biobase', 'limma'))"
 
 # Install CRAN suggests
 RUN R --slave --no-restore --no-save -e "install.packages(c('VGAM', 'R.utils', 'metap'))"
-RUN R --slave --no-restore --no-save -e "install.packages('https://cran.rstudio.com//src/contrib/Archive/SDMTools/SDMTools_1.1-221.2.tar.gz', repos = NULL)"
 
 # Install hdf5r
 RUN R --slave --no-restore --no-save -e "install.packages('hdf5r')"

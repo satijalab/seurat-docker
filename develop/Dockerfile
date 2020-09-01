@@ -1,52 +1,14 @@
-# Dockerfile for the latest version of Seurat (v3.1.5)
-FROM rstudio/r-base:4.0.0-bionic
-ENV DEBIAN_FRONTEND noninteractive
-
-# Set global R options
-RUN echo "options(repos = 'https://cloud.r-project.org')" > $(R --slave --no-restore --no-save -e "cat(Sys.getenv('R_HOME'))")/etc/Rprofile.site
-
-# Install Seurat's system dependencies
-RUN apt-get update
-RUN apt-get install -y \
-    libhdf5-dev \
-    libcurl4-openssl-dev \
-    libssl-dev \
-    libpng-dev \
-    libboost-all-dev \
-    libxml2-dev \
-    openjdk-8-jdk \
-    python3-dev \
-    python3-pip \
-    wget \
-    git \
-    libfftw3-dev \
-    pandoc 
-
-# Install UMAP
-RUN pip3 install umap-learn
-
-# Install FIt-SNE
-RUN git clone https://github.com/KlugerLab/FIt-SNE.git
-RUN g++ -std=c++11 -O3 FIt-SNE/src/sptree.cpp FIt-SNE/src/tsne.cpp FIt-SNE/src/nbodyfft.cpp  -o bin/fast_tsne -pthread -lfftw3 -lm
-
-# Install bioconductor dependencies
-RUN R --slave --no-restore --no-save -e "install.packages('BiocManager')"
-RUN R --slave --no-restore --no-save -e "BiocManager::install('multtest')"
-RUN R --slave --no-restore --no-save -e "BiocManager::install(c('pcaMethods', 'scran', 'S4Vectors', \
-'SummarizedExperiment', 'SingleCellExperiment', 'MAST', 'DESeq2', 'GenomicRanges', 'GenomeInfoDb', \
-'IRanges', 'rtracklayer', 'monocle', 'Biobase', 'VGAM', 'scater'))"
-
-# Install hdf5r
-RUN R --slave --no-restore --no-save -e "install.packages('hdf5r')"
+# Dockerfile for the development version of Seurat
+FROM satijalab/seurat:3.2.0
 
 # Install new develop R dependencies
-RUN R --slave --no-restore --no-save -e "install.packages(c('patchwork', 'testthat', 'devtools', 'shiny', 'miniUI', 'metap'))"
-RUN R --slave --no-restore --no-save -e "devtools::install_version('SDMTools', version = '1.1-221.2', repos = 'http://cran.us.r-project.org')"
+RUN R --slave --no-restore --no-save -e "install.packages('devtools')"
+RUN R --slave --no-restore --no-save -e "install.packages(c('ggplotify','enrichR', 'mixtools'))"
 
 # Install loomR
 RUN R --slave --no-restore --no-save -e "devtools::install_github('mojaveazure/loomR', ref = 'develop')"
 
-# Install Seurat
-RUN R --slave --no-restore --no-save -e "install.packages('Seurat')"
+# Install rcmdcheck
+RUN R --slave --no-restore --no-save -e "install.packages('rcmdcheck')"
 
 CMD [ "R" ]

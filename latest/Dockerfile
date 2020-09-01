@@ -18,7 +18,8 @@ RUN apt-get install -y \
     python3-pip \
     wget \
     git \
-    libfftw3-dev
+    libfftw3-dev \
+    libgsl-dev
 
 # Install UMAP
 RUN pip3 install umap-learn
@@ -32,7 +33,7 @@ RUN R --slave --no-restore --no-save -e "install.packages('BiocManager')"
 RUN R --slave --no-restore --no-save -e "BiocManager::install(c('multtest', 'S4Vectors', 'SummarizedExperiment', 'SingleCellExperiment', 'MAST', 'DESeq2', 'BiocGenerics', 'GenomicRanges', 'IRanges', 'rtracklayer', 'monocle', 'Biobase', 'limma'))"
 
 # Install CRAN suggests
-RUN R --slave --no-restore --no-save -e "install.packages(c('VGAM', 'R.utils', 'metap'))"
+RUN R --slave --no-restore --no-save -e "install.packages(c('VGAM', 'R.utils', 'metap', 'Rfast2'))"
 
 # Install hdf5r
 RUN R --slave --no-restore --no-save -e "install.packages('hdf5r')"

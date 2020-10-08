@@ -11,4 +11,7 @@ RUN R --slave --no-restore --no-save -e "devtools::install_github('mojaveazure/l
 # Install rcmdcheck
 RUN R --slave --no-restore --no-save -e "install.packages('rcmdcheck')"
 
+# Install latest sctransform
+RUN R --slave --no-restore --no-save -e "install.packages('sctransform')"
+
 CMD [ "R" ]

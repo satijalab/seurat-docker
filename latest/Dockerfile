@@ -1,4 +1,4 @@
-# Dockerfile for the latest version of Seurat (v3.2.1)
+# Dockerfile for the latest version of Seurat (v3.2.2)
 FROM rstudio/r-base:4.0.2-bionic
 
 # Set global R options

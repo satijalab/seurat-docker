@@ -3,6 +3,7 @@ FROM rstudio/r-base:4.0.3-bionic
 
 # Set global R options
 RUN echo "options(repos = 'https://cloud.r-project.org')" > $(R --no-echo --no-save -e "cat(Sys.getenv('R_HOME'))")/etc/Rprofile.site
+ENV RETICULATE_MINICONDA_ENABLED=FALSE
 
 # Install Seurat's system dependencies
 RUN apt-get update

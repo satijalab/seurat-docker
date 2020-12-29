@@ -1,8 +1,8 @@
-# Dockerfile for the latest version of Seurat (v3.2.2)
-FROM rstudio/r-base:4.0.2-bionic
+# Dockerfile for the latest version of Seurat (v3.2.3)
+FROM rstudio/r-base:4.0.3-bionic
 
 # Set global R options
-RUN echo "options(repos = 'https://cloud.r-project.org')" > $(R --slave --no-restore --no-save -e "cat(Sys.getenv('R_HOME'))")/etc/Rprofile.site
+RUN echo "options(repos = 'https://cloud.r-project.org')" > $(R --no-echo --no-save -e "cat(Sys.getenv('R_HOME'))")/etc/Rprofile.site
 
 # Install Seurat's system dependencies
 RUN apt-get update
@@ -33,16 +33,16 @@ RUN git clone --branch v1.2.1 https://github.com/KlugerLab/FIt-SNE.git
 RUN g++ -std=c++11 -O3 FIt-SNE/src/sptree.cpp FIt-SNE/src/tsne.cpp FIt-SNE/src/nbodyfft.cpp  -o bin/fast_tsne -pthread -lfftw3 -lm
 
 # Install bioconductor dependencies & suggests
-RUN R --slave --no-restore --no-save -e "install.packages('BiocManager')"
-RUN R --slave --no-restore --no-save -e "BiocManager::install(c('multtest', 'S4Vectors', 'SummarizedExperiment', 'SingleCellExperiment', 'MAST', 'DESeq2', 'BiocGenerics', 'GenomicRanges', 'IRanges', 'rtracklayer', 'monocle', 'Biobase', 'limma'))"
+RUN R --no-echo --no-restore --no-save -e "install.packages('BiocManager')"
+RUN R --no-echo --no-restore --no-save -e "BiocManager::install(c('multtest', 'S4Vectors', 'SummarizedExperiment', 'SingleCellExperiment', 'MAST', 'DESeq2', 'BiocGenerics', 'GenomicRanges', 'IRanges', 'rtracklayer', 'monocle', 'Biobase', 'limma'))"
 
 # Install CRAN suggests
-RUN R --slave --no-restore --no-save -e "install.packages(c('VGAM', 'R.utils', 'metap', 'Rfast2', 'ape'))"
+RUN R --no-echo --no-restore --no-save -e "install.packages(c('VGAM', 'R.utils', 'metap', 'Rfast2', 'ape'))"
 
 # Install hdf5r
-RUN R --slave --no-restore --no-save -e "install.packages('hdf5r')"
+RUN R --no-echo --no-restore --no-save -e "install.packages('hdf5r')"
 
 # Install Seurat
-RUN R --slave --no-restore --no-save -e "install.packages('Seurat')"
+RUN R --no-echo --no-restore --no-save -e "install.packages('Seurat')"
 
 CMD [ "R" ]

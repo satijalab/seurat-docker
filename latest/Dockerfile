@@ -1,5 +1,5 @@
-# Dockerfile for the latest version of Seurat (v3.2.3)
-FROM rstudio/r-base:4.0.3-bionic
+# Dockerfile for the Seurat 4.0.0
+FROM rocker/r-ver:4.0.3
 
 # Set global R options
 RUN echo "options(repos = 'https://cloud.r-project.org')" > $(R --no-echo --no-save -e "cat(Sys.getenv('R_HOME'))")/etc/Rprofile.site
@@ -38,12 +38,17 @@ RUN R --no-echo --no-restore --no-save -e "install.packages('BiocManager')"
 RUN R --no-echo --no-restore --no-save -e "BiocManager::install(c('multtest', 'S4Vectors', 'SummarizedExperiment', 'SingleCellExperiment', 'MAST', 'DESeq2', 'BiocGenerics', 'GenomicRanges', 'IRanges', 'rtracklayer', 'monocle', 'Biobase', 'limma'))"
 
 # Install CRAN suggests
-RUN R --no-echo --no-restore --no-save -e "install.packages(c('VGAM', 'R.utils', 'metap', 'Rfast2', 'ape'))"
+RUN R --no-echo --no-restore --no-save -e "install.packages(c('VGAM', 'R.utils', 'metap', 'Rfast2', 'ape', 'enrichR', 'mixtools'))"
 
 # Install hdf5r
 RUN R --no-echo --no-restore --no-save -e "install.packages('hdf5r')"
 
 # Install Seurat
+RUN R --no-echo --no-restore --no-save -e "install.packages('remotes')"
 RUN R --no-echo --no-restore --no-save -e "install.packages('Seurat')"
 
+# Install SeuratDisk
+RUN R --no-echo --no-restore --no-save -e "remotes::install_github('mojaveazure/seurat-disk')"
+
 CMD [ "R" ]
+

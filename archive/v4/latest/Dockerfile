@@ -1,4 +1,4 @@
-# Dockerfile for the latest v4-beta of Seurat (v3.9.9.9032)
+# Dockerfile for the latest v4-beta of Seurat (v3.9.9.9036)
 FROM rocker/r-ver:4.0.3
 
 # Set global R options
@@ -38,13 +38,13 @@ RUN R --no-echo --no-restore --no-save -e "install.packages('BiocManager')"
 RUN R --no-echo --no-restore --no-save -e "BiocManager::install(c('multtest', 'S4Vectors', 'SummarizedExperiment', 'SingleCellExperiment', 'MAST', 'DESeq2', 'BiocGenerics', 'GenomicRanges', 'IRanges', 'rtracklayer', 'monocle', 'Biobase', 'limma'))"
 
 # Install CRAN suggests
-RUN R --no-echo --no-restore --no-save -e "install.packages(c('VGAM', 'R.utils', 'metap', 'Rfast2', 'ape'))"
+RUN R --no-echo --no-restore --no-save -e "install.packages(c('VGAM', 'R.utils', 'metap', 'Rfast2', 'ape', 'enrichR', 'mixtools'))"
 
 # Install hdf5r
 RUN R --no-echo --no-restore --no-save -e "install.packages('hdf5r')"
 
 # Install Seurat
 RUN R --no-echo --no-restore --no-save -e "install.packages('remotes')"
-RUN R --no-echo --no-restore --no-save -e "remotes::install_github('satijalab/seurat', ref = '9969ce5d11a24754531cde2030926ebf029866da')"
+RUN R --no-echo --no-restore --no-save -e "remotes::install_github('satijalab/seurat', ref = '3166806a2bd20b708d47bb6125edb2d350e8fd9b')"
 
 CMD [ "R" ]

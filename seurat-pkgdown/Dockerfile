@@ -15,7 +15,7 @@ RUN apt-get install -y \
     libpng-dev \                                                                                       
     libtiff5-dev \                                                                                     
     libjpeg-dev \                                                                                      
-    curl  
+    curl 
 
 # Install later version of pandoc                                                                   
 RUN curl -L https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-linux-amd64.tar.gz --create-dirs -o software/pandoc-2.9.2.1-linux-amd64.tar.gz
@@ -53,5 +53,16 @@ RUN chmod -R a+rwx data/
 # Get SeuratData
 RUN R --no-echo --no-restore --no-save -e "remotes::install_github('satijalab/seurat-data',  INSTALL_opts = '--no-test-load')"
 RUN R --no-echo --no-restore --no-save -e "options(SeuratData.repo.use = 'satijalab04.nygenome.org'); SeuratData::InstallData(c('hcabm40k', 'ifnb', 'panc8', 'pbmcsca', 'stxBrain', 'ssHippo', 'pbmc3k', 'bmcite', 'thp1.eccite', 'pbmcMultiome'))"
+
+# Tools to shrink size of vignettes
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install -y \ 
+    pngquant \
+    nodejs 
+
+RUN npm install html-minifier -g
+
+# Install netlify CLI                                                                               
+RUN npm install -g netlify-cli  
 
 CMD [ "R" ]

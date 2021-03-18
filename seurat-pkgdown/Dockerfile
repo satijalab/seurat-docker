@@ -1,5 +1,5 @@
-# Dockerfile for use with the CI of seurat-wrappers
-FROM satijalab/seurat:4.0.0
+# Dockerfile for building the pkgdown site
+FROM satijalab/seurat:4.0.1
 
 # Install system dependencies
 RUN apt-get update
@@ -63,6 +63,6 @@ RUN apt-get install -y \
 RUN npm install html-minifier -g
 
 # Install netlify CLI                                                                               
-RUN npm install -g netlify-cli  
+RUN npm install --unsafe-perm=true -g netlify-cli  
 
 CMD [ "R" ]

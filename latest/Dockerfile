@@ -1,5 +1,5 @@
 # Dockerfile for the Seurat 4.0.0
-FROM rocker/r-ver:4.0.3
+FROM rocker/r-ver:4.0.4
 
 # Set global R options
 RUN echo "options(repos = 'https://cloud.r-project.org')" > $(R --no-echo --no-save -e "cat(Sys.getenv('R_HOME'))")/etc/Rprofile.site

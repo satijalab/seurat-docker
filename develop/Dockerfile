@@ -1,5 +1,5 @@
 # Dockerfile for the development version of Seurat
-FROM satijalab/seurat:4.0.3
+FROM satijalab/seurat:4.0.5
 
 # Install system dependencies
 RUN apt-get install -y \

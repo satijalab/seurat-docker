@@ -1,4 +1,4 @@
-# Dockerfile for the Seurat 4.0.5
+# Dockerfile for the Seurat 4.1.0
 FROM rocker/r-ver:4.1.0
 
 # Set global R options

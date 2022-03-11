@@ -1,5 +1,5 @@
 # Dockerfile for building the pkgdown site
-FROM satijalab/seurat:4.0.3
+FROM satijalab/seurat:4.1.0
 
 # Install system dependencies
 RUN apt-get update
@@ -8,20 +8,20 @@ RUN apt-get install -y \
     pandoc \
     libbz2-dev \
     liblzma-dev \
-    libfontconfig1-dev \                                                                               
-    libharfbuzz-dev \                                                                                  
-    libfribidi-dev \                                                                                   
-    libfreetype6-dev \                                                                                 
-    libpng-dev \                                                                                       
-    libtiff5-dev \                                                                                     
-    libjpeg-dev \                                                                                      
-    curl 
+    libfontconfig1-dev \
+    libharfbuzz-dev \
+    libfribidi-dev \
+    libfreetype6-dev \
+    libpng-dev \
+    libtiff5-dev \
+    libjpeg-dev \
+    curl
 
-# Install later version of pandoc                                                                   
+# Install later version of pandoc
 RUN curl -L https://github.com/jgm/pandoc/releases/download/2.9.2.1/pandoc-2.9.2.1-linux-amd64.tar.gz --create-dirs -o software/pandoc-2.9.2.1-linux-amd64.tar.gz
-RUN tar -zxvf software/pandoc-2.9.2.1-linux-amd64.tar.gz -C software/                               
-RUN cp software/pandoc-2.9.2.1/bin/* /usr/bin/                                                      
-RUN rm -rf software 
+RUN tar -zxvf software/pandoc-2.9.2.1-linux-amd64.tar.gz -C software/
+RUN cp software/pandoc-2.9.2.1/bin/* /usr/bin/
+RUN rm -rf software
 
 # Set global R options
 RUN echo "options(repos = c('https://cloud.r-project.org', 'https://bioconductor.org/packages/3.12/bioc'), timeout = 1000)" > $(R --no-echo --no-restore --no-save -e "cat(Sys.getenv('R_HOME'))")/etc/Rprofile.site
@@ -32,7 +32,7 @@ RUN R --no-echo --no-restore --no-save -e "remotes::install_github('sjessa/ggmin
 RUN R --no-echo --no-restore --no-save -e "remotes::install_github('mojaveazure/seurat-disk')"
 RUN R --no-echo --no-restore --no-save -e "remotes::install_github('immunogenomics/presto')"
 
-# Install Bioconductor dependencies 
+# Install Bioconductor dependencies
 RUN R --no-echo --no-restore --no-save -e "BiocManager::install(c('pcaMethods', 'scran', 'scater'))"
 RUN R --no-echo --no-restore --no-save -e "BiocManager::install(c('ggbio', 'biovizBase', 'AnnotationFilter', 'qvalue', 'EnsDb.Hsapiens.v86', 'BSgenome.Hsapiens.UCSC.hg38', 'chromVAR', 'TFBSTools', 'JASPAR2020', 'motifmatchr', 'Rsamtools', 'glmGamPoi'))"
 
@@ -56,13 +56,13 @@ RUN R --no-echo --no-restore --no-save -e "options(SeuratData.repo.use = 'satija
 
 # Tools to shrink size of vignettes
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
-RUN apt-get install -y \ 
+RUN apt-get install -y \
     pngquant \
-    nodejs 
+    nodejs
 
 RUN npm install html-minifier -g
 
-# Install netlify CLI                                                                               
-RUN npm install --unsafe-perm=true -g netlify-cli  
+# Install netlify CLI
+RUN npm install --unsafe-perm=true -g netlify-cli
 
 CMD [ "R" ]

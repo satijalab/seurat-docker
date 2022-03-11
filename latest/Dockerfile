@@ -20,7 +20,7 @@ RUN apt-get install -y \
     wget \
     git \
     libfftw3-dev \
-    libgsl-dev 
+    libgsl-dev
 
 RUN apt-get install -y llvm-10
 
@@ -35,7 +35,7 @@ RUN g++ -std=c++11 -O3 FIt-SNE/src/sptree.cpp FIt-SNE/src/tsne.cpp FIt-SNE/src/n
 
 # Install bioconductor dependencies & suggests
 RUN R --no-echo --no-restore --no-save -e "install.packages('BiocManager')"
-RUN R --no-echo --no-restore --no-save -e "BiocManager::install(c('multtest', 'S4Vectors', 'SummarizedExperiment', 'SingleCellExperiment', 'MAST', 'DESeq2', 'BiocGenerics', 'GenomicRanges', 'IRanges', 'rtracklayer', 'monocle', 'Biobase', 'limma'))"
+RUN R --no-echo --no-restore --no-save -e "BiocManager::install(c('multtest', 'S4Vectors', 'SummarizedExperiment', 'SingleCellExperiment', 'MAST', 'DESeq2', 'BiocGenerics', 'GenomicRanges', 'IRanges', 'rtracklayer', 'monocle', 'Biobase', 'limma', 'glmGamPoi'))"
 
 # Install CRAN suggests
 RUN R --no-echo --no-restore --no-save -e "install.packages(c('VGAM', 'R.utils', 'metap', 'Rfast2', 'ape', 'enrichR', 'mixtools'))"
@@ -51,4 +51,3 @@ RUN R --no-echo --no-restore --no-save -e "install.packages('Seurat')"
 RUN R --no-echo --no-restore --no-save -e "remotes::install_github('mojaveazure/seurat-disk')"
 
 CMD [ "R" ]
-

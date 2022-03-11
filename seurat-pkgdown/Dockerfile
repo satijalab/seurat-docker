@@ -34,7 +34,7 @@ RUN R --no-echo --no-restore --no-save -e "remotes::install_github('immunogenomi
 
 # Install Bioconductor dependencies
 RUN R --no-echo --no-restore --no-save -e "BiocManager::install(c('pcaMethods', 'scran', 'scater'))"
-RUN R --no-echo --no-restore --no-save -e "BiocManager::install(c('ggbio', 'biovizBase', 'AnnotationFilter', 'qvalue', 'EnsDb.Hsapiens.v86', 'BSgenome.Hsapiens.UCSC.hg38', 'chromVAR', 'TFBSTools', 'JASPAR2020', 'motifmatchr', 'Rsamtools', 'glmGamPoi'))"
+RUN R --no-echo --no-restore --no-save -e "BiocManager::install(c('ggbio', 'biovizBase', 'AnnotationFilter', 'qvalue', 'EnsDb.Hsapiens.v86', 'BSgenome.Hsapiens.UCSC.hg38', 'chromVAR', 'TFBSTools', 'JASPAR2020', 'motifmatchr', 'Rsamtools'))"
 
 # Install Signac
 RUN R --no-echo --no-restore --no-save -e "install.packages('Signac')"

@@ -1,4 +1,4 @@
-# Dockerfile for the Seurat 4.1.0
+# Dockerfile for Seurat 4.3.0
 FROM rocker/r-ver:4.1.0
 
 # Set global R options
@@ -42,6 +42,9 @@ RUN R --no-echo --no-restore --no-save -e "install.packages(c('VGAM', 'R.utils',
 
 # Install hdf5r
 RUN R --no-echo --no-restore --no-save -e "install.packages('hdf5r')"
+
+# Install latest Matrix
+RUN R --no-echo --no-restore --no-save -e "install.packages('Matrix')"
 
 # Install Seurat
 RUN R --no-echo --no-restore --no-save -e "install.packages('remotes')"

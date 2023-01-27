@@ -15,7 +15,7 @@ RUN apt-get install -y \
     libjpeg-dev
 
 # Install some other stuff for bridge integration
-Run R --no-echo --no-restore --no-save -e "install.packages(c('fastDummies', 'RcppHNSW', 'Rspectra'))"
+RUN R --no-echo --no-restore --no-save -e "install.packages(c('fastDummies', 'RcppHNSW', 'RSpectra', 'lifecycle', 'generics'))"
 
 # Install new develop R dependencies
 RUN R --no-echo --no-restore --no-save -e "install.packages('devtools')"

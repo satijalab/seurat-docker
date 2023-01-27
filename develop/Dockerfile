@@ -1,9 +1,18 @@
 # Dockerfile for the development version of Seurat
-FROM satijalab/seurat:4.1.0
+FROM satijalab/seurat:4.3.0
 
 # Install system dependencies
+RUN apt-get update -y
+RUN apt-get upgrade -y
 RUN apt-get install -y \
-    libgit2-dev
+    libgit2-dev \
+    libfontconfig1-dev \
+    libharfbuzz-dev \
+    libfribidi-dev \
+    libfreetype6-dev \
+    libpng-dev \
+    libtiff5-dev \
+    libjpeg-dev
 
 # Install some other stuff for bridge integration
 Run R --no-echo --no-restore --no-save -e "install.packages(c('fastDummies', 'RcppHNSW', 'Rspectra'))"

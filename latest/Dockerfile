@@ -40,6 +40,9 @@ RUN R --no-echo --no-restore --no-save -e "BiocManager::install(c('multtest', 'S
 # Install CRAN suggests
 RUN R --no-echo --no-restore --no-save -e "install.packages(c('VGAM', 'R.utils', 'metap', 'Rfast2', 'ape', 'enrichR', 'mixtools'))"
 
+# Install spatstat
+RUN R --no-echo --no-restore --no-save -e "install.packages(c('spatstat.explore', 'spatstat.geom'))"
+
 # Install hdf5r
 RUN R --no-echo --no-restore --no-save -e "install.packages('hdf5r')"
 

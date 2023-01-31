@@ -1,5 +1,5 @@
 # Dockerfile for building the pkgdown site
-FROM satijalab/seurat:4.3.0
+FROM satijalab/seurat:develop
 
 # Install system dependencies
 RUN apt-get update

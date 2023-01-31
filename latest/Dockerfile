@@ -20,7 +20,8 @@ RUN apt-get install -y \
     wget \
     git \
     libfftw3-dev \
-    libgsl-dev
+    libgsl-dev \
+    pkg-config
 
 RUN apt-get install -y llvm-10
 

@@ -49,6 +49,9 @@ RUN wget https://www.dropbox.com/s/5b7czl109ibe8hn/all_vignette_files.tar.gz?dl=
 RUN tar -zxvf data/all_vignette_files.tar.gz?dl=1 --strip-components=1 -C data/
 RUN rm data/all_vignette_files.tar.gz?dl=1
 RUN chmod -R a+rwx data/
+COPY vignette_data.tar.gz data/
+RUN tar -xf data/vignette_data.tar.gz --directory=data/
+RUN rm data/vignette_data.tar.gz
 
 # Get SeuratData
 RUN R --no-echo --no-restore --no-save -e "remotes::install_github('satijalab/seurat-data',  INSTALL_opts = '--no-test-load')"
@@ -64,5 +67,11 @@ RUN npm install html-minifier -g
 
 # Install netlify CLI
 RUN npm install --unsafe-perm=true -g netlify-cli
+
+# Add additional BPCells vignette data
+COPY vignette_data_2.tar.gz data/
+RUN mkdir data/PBMCVignette/
+RUN tar -xf data/vignette_data_2.tar.gz --directory=data/PBMCVignette/
+RUN rm data/vignette_data_2.tar.gz
 
 CMD [ "R" ]

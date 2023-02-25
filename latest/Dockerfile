@@ -1,5 +1,5 @@
 # Dockerfile for Seurat 4.3.0
-FROM rocker/r-ver:4.1.0
+FROM rocker/r-ver:4.2.0
 
 # Set global R options
 RUN echo "options(repos = 'https://cloud.r-project.org')" > $(R --no-echo --no-save -e "cat(Sys.getenv('R_HOME'))")/etc/Rprofile.site
@@ -25,6 +25,9 @@ RUN apt-get install -y \
 
 RUN apt-get install -y llvm-10
 
+# Install system library for rgeos
+RUN apt-get install -y libgeos-dev
+
 # Install UMAP
 RUN LLVM_CONFIG=/usr/lib/llvm-10/bin/llvm-config pip3 install llvmlite
 RUN pip3 install numpy
@@ -49,6 +52,9 @@ RUN R --no-echo --no-restore --no-save -e "install.packages('hdf5r')"
 
 # Install latest Matrix
 RUN R --no-echo --no-restore --no-save -e "install.packages('Matrix')"
+
+# Install rgeos
+RUN R --no-echo --no-restore --no-save -e "install.packages('rgeos')"
 
 # Install Seurat
 RUN R --no-echo --no-restore --no-save -e "install.packages('remotes')"

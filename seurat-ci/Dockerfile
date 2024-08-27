@@ -20,3 +20,10 @@ COPY scripts/install_required_deps.R /usr/local/bin/install_required_deps
 COPY scripts/install_optional_deps.R /usr/local/bin/install_optional_deps
 COPY scripts/install_pkg.R /usr/local/bin/install_pkg
 COPY scripts/run_checks.R /usr/local/bin/run_checks
+
+WORKDIR /github/workspace
+
+CMD install_required_deps \
+    && install_optional_deps \
+    && install_pkg \
+    && run_checks

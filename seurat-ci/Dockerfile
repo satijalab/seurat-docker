@@ -4,7 +4,12 @@ RUN apt-get update && apt-get install -y libhdf5-dev
 RUN Rscript -e 'install.packages("BPCells", repos = "https://bnprks.r-universe.dev")'
 
 
-FROM install-bpcells AS setup-env
+FROM install-bpcells AS install-pandoc
+
+RUN apt-get install -y pandoc
+
+
+FROM install-pandoc AS setup-env
 
 ENV _R_CHECK_PKG_SIZES_="false"
 ENV _R_CHECK_RD_XREFS_="false"

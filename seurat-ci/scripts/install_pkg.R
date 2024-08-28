@@ -4,4 +4,4 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
     install.packages("remotes")
 }
 
-remotes::install_local()
+remotes::install_local(dependencies = FALSE)

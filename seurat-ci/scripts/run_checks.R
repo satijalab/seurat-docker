@@ -5,7 +5,6 @@ if (!requireNamespace("rcmdcheck", quietly = TRUE)) {
 }
 
 rcmdcheck::rcmdcheck(
-    args = c("--no-manual", "--as-cran"), 
-    build_args = "--no-manual", 
+    args = c("--as-cran"), 
     error_on = "warning"
 )

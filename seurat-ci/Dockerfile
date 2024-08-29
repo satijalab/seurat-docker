@@ -1,15 +1,18 @@
-FROM rocker/r2u:latest AS install-bpcells
+FROM rocker/r2u:latest AS base-setup
 
-RUN apt-get update && apt-get install -y libhdf5-dev
+RUN apt-get update
+RUN apt-get install -y pandoc
+RUN apt-get install -y texlive
+RUN apt-get install -y texlive-fonts-extra
+
+
+FROM base-setup AS install-bpcells
+
+RUN apt-get install -y libhdf5-dev
 RUN Rscript -e 'install.packages("BPCells", repos = "https://bnprks.r-universe.dev")'
 
 
-FROM install-bpcells AS install-pandoc
-
-RUN apt-get install -y pandoc
-
-
-FROM install-pandoc AS setup-env
+FROM install-bpcells AS setup-env
 
 ENV _R_CHECK_PKG_SIZES_="false"
 ENV _R_CHECK_RD_XREFS_="false"
@@ -23,7 +26,4 @@ COPY scripts/run_checks.R /usr/local/bin/run_checks
 
 WORKDIR /github/workspace
 
-CMD install_required_deps \
-    && install_optional_deps \
-    && install_pkg \
-    && run_checks
+CMD install_required_deps && install_optional_deps && run_checks

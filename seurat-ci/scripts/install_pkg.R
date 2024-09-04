@@ -1,8 +1,10 @@
 #!/usr/bin/env Rscript
 
-if (!requireNamespace("remotes", quietly = TRUE)) {
-    install.packages("remotes")
-}
+parser <- argparse::ArgumentParser()  
+parser$add_argument("pkgdir", nargs = "?", default = ".")
 
-devtools::clean_dll()
-remotes::install_local(dependencies = FALSE)
+args <- parser$parse_args()
+pkgdir <- args$pkgdir
+
+devtools::clean_dll(pkgdir)
+remotes::install_local(pkgdir, dependencies = FALSE)

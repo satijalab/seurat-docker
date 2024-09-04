@@ -1,10 +1,12 @@
 #!/usr/bin/env Rscript
 
-if (!requireNamespace("rcmdcheck", quietly = TRUE)) {
-    install.packages("rcmdcheck")
-}
+parser <- argparse::ArgumentParser()  
+parser$add_argument("pkgdir", nargs = "?", default = ".")
 
-devtools::clean_dll()
+args <- parser$parse_args()
+pkgdir <- args$pkgdir
+
+devtools::clean_dll(pkgdir)
 rcmdcheck::rcmdcheck(
     args = c("--as-cran"), 
     error_on = "warning"

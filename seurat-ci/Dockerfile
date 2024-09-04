@@ -20,9 +20,7 @@ ENV _R_CHECK_CRAN_INCOMING_NOTE_GNU_MAKE_="false"
 ENV _R_CHECK_PACKAGE_DATASETS_SUPPRESS_NOTES_="true"
 
 RUN Rscript -e 'install.packages("argparse")'
-RUN Rscript -e 'install.packages("rcmdcheck")'
-RUN Rscript -e 'install.packages("remotes")'
-RUN Rscript -e 'install.packages("testthat")'
+RUN Rscript -e 'install.packages("devtools")'
 
 COPY scripts/install_deps.R /usr/local/bin/install_deps
 COPY scripts/install_pkg.R /usr/local/bin/install_pkg

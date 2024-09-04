@@ -1,8 +1,10 @@
 #!/usr/bin/env Rscript
 
-if (!requireNamespace("testthat", quietly = TRUE)) {
-    install.packages("testthat")
-}
+parser <- argparse::ArgumentParser()  
+parser$add_argument("pkgdir", nargs = "?", default = ".")
 
-devtools::clean_dll()
-testthat::test_local()
+args <- parser$parse_args()
+pkgdir <- args$pkgdir
+
+devtools::clean_dll(pkgdir)
+testthat::test_local(pkgdir)

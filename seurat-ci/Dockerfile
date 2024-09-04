@@ -19,11 +19,16 @@ ENV _R_CHECK_RD_XREFS_="false"
 ENV _R_CHECK_CRAN_INCOMING_NOTE_GNU_MAKE_="false"
 ENV _R_CHECK_PACKAGE_DATASETS_SUPPRESS_NOTES_="true"
 
-COPY scripts/install_required_deps.R /usr/local/bin/install_required_deps
-COPY scripts/install_optional_deps.R /usr/local/bin/install_optional_deps
+RUN Rscript -e 'install.packages("argparse")'
+RUN Rscript -e 'install.packages("rcmdcheck")'
+RUN Rscript -e 'install.packages("remotes")'
+RUN Rscript -e 'install.packages("testthat")'
+
+COPY scripts/install_deps.R /usr/local/bin/install_deps
 COPY scripts/install_pkg.R /usr/local/bin/install_pkg
 COPY scripts/run_checks.R /usr/local/bin/run_checks
+COPY scripts/run_tests.R /usr/local/bin/run_tests
 
 WORKDIR /github/workspace
 
-CMD install_required_deps && install_optional_deps && run_checks
+CMD install_deps --all && run_checks

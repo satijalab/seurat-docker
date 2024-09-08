@@ -1,32 +1,62 @@
-FROM rocker/r2u:latest AS base-setup
-
-RUN apt-get update
-RUN apt-get install -y pandoc
-RUN apt-get install -y texlive
-RUN apt-get install -y texlive-fonts-extra
+FROM rocker/rstudio:latest AS rocker-rstudio
 
 
-FROM base-setup AS install-bpcells
+FROM rocker/r2u:jammy AS install-bpcells
 
-RUN apt-get install -y libhdf5-dev
+RUN apt-get update && apt-get install -y libhdf5-dev
 RUN Rscript -e 'install.packages("BPCells", repos = "https://bnprks.r-universe.dev")'
 
 
-FROM install-bpcells AS setup-env
+FROM install-bpcells AS install-pandoc
 
-ENV _R_CHECK_PKG_SIZES_="false"
-ENV _R_CHECK_RD_XREFS_="false"
-ENV _R_CHECK_CRAN_INCOMING_NOTE_GNU_MAKE_="false"
-ENV _R_CHECK_PACKAGE_DATASETS_SUPPRESS_NOTES_="true"
+COPY --from=rocker-rstudio /rocker_scripts/install_pandoc.sh /rocker_scripts/install_pandoc.sh
+RUN /rocker_scripts/install_pandoc.sh
+RUN rm -rf rocker_scripts
 
-RUN Rscript -e 'install.packages("argparse")'
-RUN Rscript -e 'install.packages("devtools")'
 
-COPY scripts/install_deps.R /usr/local/bin/install_deps
-COPY scripts/install_pkg.R /usr/local/bin/install_pkg
-COPY scripts/run_checks.R /usr/local/bin/run_checks
-COPY scripts/run_tests.R /usr/local/bin/run_tests
+FROM install-pandoc AS install-quarto
 
-WORKDIR /github/workspace
+COPY --from=rocker-rstudio /rocker_scripts/install_quarto.sh /rocker_scripts/install_quarto.sh
+RUN /rocker_scripts/install_quarto.sh
+RUN rm -rf rocker_scripts
 
-CMD install_deps --all && run_checks
+
+FROM install-quarto AS install-rstudio
+
+
+ENV CRAN="https://p3m.dev/cran/__linux__/jammy/latest"
+ENV LANG=en_US.UTF-8
+ENV R_VERSION="4.4.1"
+ENV R_HOME="/usr/lib/R"
+ENV RSTUDIO_VERSION="2024.04.2+764"
+ENV S6_VERSION="v2.1.0.2"
+ENV TZ="Etc/UTC"
+ENV DEFAULT_USER "seurat-user"
+
+COPY --from=rocker-rstudio /rocker_scripts/default_user.sh /rocker_scripts/default_user.sh
+COPY --from=rocker-rstudio /rocker_scripts/init_set_env.sh /rocker_scripts/init_set_env.sh
+COPY --from=rocker-rstudio /rocker_scripts/init_userconf.sh /rocker_scripts/init_userconf.sh
+COPY --from=rocker-rstudio /rocker_scripts/install_rstudio.sh /rocker_scripts/install_rstudio.sh
+COPY --from=rocker-rstudio /rocker_scripts/install_s6init.sh /rocker_scripts/install_s6init.sh
+COPY --from=rocker-rstudio /rocker_scripts/pam-helper.sh /rocker_scripts/pam-helper.sh
+RUN /rocker_scripts/install_rstudio.sh
+
+RUN rm -rf rocker_scripts
+RUN mv init /usr/local/bin/launch_rstudio
+
+RUN apt-get update \
+    && apt-get install -y sudo \
+    && echo $DEFAULT_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$DEFAULT_USER \
+    && chmod 0440 /etc/sudoers.d/$DEFAULT_USER
+
+CMD ["launch_rstudio"]
+
+
+FROM install-rstudio AS setup-workspace
+
+RUN Rscript -e 'install.packages(c("argparse", "devtools"))'
+
+COPY tools/install_deps.R /usr/local/bin/r-install-deps
+COPY tools/install_pkg.R /usr/local/bin/r-install-pkg
+COPY tools/cran_checks.R /usr/local/bin/r-cran-checks
+COPY tools/test_pkg.R /usr/local/bin/r-test-pkg

@@ -1,6 +1,6 @@
-FROM rocker/rver:4.4.1 AS rocker-base
+FROM rocker/r-ver:4.4.1 AS rocker
 
-FROM satijalab/seurat-base AS seurat-rstudio
+FROM --platform=linux/amd64 satijalab/seurat-base AS seurat-rstudio
 
 ENV CRAN="https://p3m.dev/cran/__linux__/jammy/latest"
 ENV LANG=en_US.UTF-8
@@ -11,12 +11,12 @@ ENV S6_VERSION="v2.1.0.2"
 ENV TZ="Etc/UTC"
 ENV DEFAULT_USER "seurat-user"
 
-COPY --from=rocker-rstudio /rocker_scripts/default_user.sh /rocker_scripts/default_user.sh
-COPY --from=rocker-rstudio /rocker_scripts/init_set_env.sh /rocker_scripts/init_set_env.sh
-COPY --from=rocker-rstudio /rocker_scripts/init_userconf.sh /rocker_scripts/init_userconf.sh
-COPY --from=rocker-rstudio /rocker_scripts/install_rstudio.sh /rocker_scripts/install_rstudio.sh
-COPY --from=rocker-rstudio /rocker_scripts/install_s6init.sh /rocker_scripts/install_s6init.sh
-COPY --from=rocker-rstudio /rocker_scripts/pam-helper.sh /rocker_scripts/pam-helper.sh
+COPY --from=rocker /rocker_scripts/default_user.sh /rocker_scripts/default_user.sh
+COPY --from=rocker /rocker_scripts/init_set_env.sh /rocker_scripts/init_set_env.sh
+COPY --from=rocker /rocker_scripts/init_userconf.sh /rocker_scripts/init_userconf.sh
+COPY --from=rocker /rocker_scripts/install_rstudio.sh /rocker_scripts/install_rstudio.sh
+COPY --from=rocker /rocker_scripts/install_s6init.sh /rocker_scripts/install_s6init.sh
+COPY --from=rocker /rocker_scripts/pam-helper.sh /rocker_scripts/pam-helper.sh
 RUN /rocker_scripts/install_rstudio.sh
 
 RUN rm -rf rocker_scripts

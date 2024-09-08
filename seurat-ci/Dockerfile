@@ -1,28 +1,41 @@
 FROM rocker/rstudio:latest AS rocker-rstudio
 
 
-FROM rocker/r2u:jammy AS install-bpcells
+FROM rocker/r2u:jammy AS setup-env
 
-RUN apt-get update && apt-get install -y libhdf5-dev
-RUN Rscript -e 'install.packages("BPCells", repos = "https://bnprks.r-universe.dev")'
-
-
-FROM install-bpcells AS install-pandoc
+RUN apt-get update \
+    && RUN apt-get install -y texlive \
+    && RUN apt-get install -y texlive-fonts-extra
 
 COPY --from=rocker-rstudio /rocker_scripts/install_pandoc.sh /rocker_scripts/install_pandoc.sh
 RUN /rocker_scripts/install_pandoc.sh
 RUN rm -rf rocker_scripts
-
-
-FROM install-pandoc AS install-quarto
 
 COPY --from=rocker-rstudio /rocker_scripts/install_quarto.sh /rocker_scripts/install_quarto.sh
 RUN /rocker_scripts/install_quarto.sh
 RUN rm -rf rocker_scripts
 
 
-FROM install-quarto AS install-rstudio
+FROM setup-env AS install-bpcells
 
+RUN apt-get update && apt-get install -y libhdf5-dev
+RUN Rscript -e 'install.packages("BPCells", repos = "https://bnprks.r-universe.dev")'
+
+
+CMD ["launch_rstudio"]
+
+
+FROM install-bpcells AS setup-workspace
+
+RUN Rscript -e 'install.packages(c("argparse", "devtools"))'
+
+COPY tools/install_deps.R /usr/local/bin/r-install-deps
+COPY tools/install_pkg.R /usr/local/bin/r-install-pkg
+COPY tools/cran_checks.R /usr/local/bin/r-cran-checks
+COPY tools/test_pkg.R /usr/local/bin/r-test-pkg
+
+
+FROM setup-workspace AS install-rstudio
 
 ENV CRAN="https://p3m.dev/cran/__linux__/jammy/latest"
 ENV LANG=en_US.UTF-8
@@ -48,15 +61,3 @@ RUN apt-get update \
     && apt-get install -y sudo \
     && echo $DEFAULT_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$DEFAULT_USER \
     && chmod 0440 /etc/sudoers.d/$DEFAULT_USER
-
-CMD ["launch_rstudio"]
-
-
-FROM install-rstudio AS setup-workspace
-
-RUN Rscript -e 'install.packages(c("argparse", "devtools"))'
-
-COPY tools/install_deps.R /usr/local/bin/r-install-deps
-COPY tools/install_pkg.R /usr/local/bin/r-install-pkg
-COPY tools/cran_checks.R /usr/local/bin/r-cran-checks
-COPY tools/test_pkg.R /usr/local/bin/r-test-pkg

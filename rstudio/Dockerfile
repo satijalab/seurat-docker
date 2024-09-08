@@ -1,6 +1,6 @@
-FROM rocker/rstudio:4.4.1 AS rocker-rstudio
+FROM rocker/rver:4.4.1 AS rocker-base
 
-FROM satijalab/seurat-base AS install-rstudio
+FROM satijalab/seurat-base AS seurat-rstudio
 
 ENV CRAN="https://p3m.dev/cran/__linux__/jammy/latest"
 ENV LANG=en_US.UTF-8

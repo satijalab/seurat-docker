@@ -39,3 +39,6 @@ EXPOSE 8787
 CMD ["init"]
 
 COPY --from=rocker /rocker_scripts /rocker_scripts
+
+RUN apt-get update && apt-get install -y libhdf5-dev
+RUN Rscript -e 'install.packages("BPCells", repos = "https://bnprks.r-universe.dev")'

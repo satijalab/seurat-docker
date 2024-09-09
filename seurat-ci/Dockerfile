@@ -1,32 +1,17 @@
-FROM rocker/r-ver:4.1.1 AS rocker
+FROM --platform=amd64 rocker/r-ver:4.1.1 AS rocker
 
-FROM rocker/r2u:jammy
+FROM --platform=amd64 rocker/r2u:jammy
 
-ENV CRAN="https://p3m.dev/cran/__linux__/jammy/latest"
-ENV DEFAULT_USER "seurat-user"
-ENV LANG=en_US.UTF-8
 ENV R_VERSION="4.4.1"
 ENV R_HOME="/usr/lib/R"
-ENV RSTUDIO_VERSION="2024.04.2+764"
-ENV S6_VERSION="v2.1.0.2"
 ENV TZ="Etc/UTC"
 
-RUN apt-get update \
-    && apt-get install -y texlive \
-    && apt-get install -y texlive-fonts-extra
+ENV CRAN="https://p3m.dev/cran/__linux__/jammy/latest"
+ENV LANG=en_US.UTF-8
 
-COPY --from=rocker /rocker_scripts/install_pandoc.sh /rocker_scripts/install_pandoc.sh
-RUN /rocker_scripts/install_pandoc.sh
-RUN rm -rf rocker_scripts
-
-COPY --from=rocker /rocker_scripts/install_quarto.sh /rocker_scripts/install_quarto.sh
-RUN /rocker_scripts/install_quarto.sh
-RUN rm -rf rocker_scripts
-
-RUN apt-get update && apt-get install -y libhdf5-dev
-RUN Rscript -e 'install.packages("BPCells", repos = "https://bnprks.r-universe.dev")'
-
-RUN Rscript -e 'install.packages(c("devtools"))'
+ENV RSTUDIO_VERSION="2024.04.2+764"
+ENV S6_VERSION="v2.1.0.2"
+ENV DEFAULT_USER "rstudio"
 
 COPY --from=rocker /rocker_scripts/default_user.sh /rocker_scripts/default_user.sh
 COPY --from=rocker /rocker_scripts/init_set_env.sh /rocker_scripts/init_set_env.sh
@@ -36,9 +21,6 @@ COPY --from=rocker /rocker_scripts/install_s6init.sh /rocker_scripts/install_s6i
 COPY --from=rocker /rocker_scripts/pam-helper.sh /rocker_scripts/pam-helper.sh
 RUN /rocker_scripts/install_rstudio.sh
 
-RUN rm -rf rocker_scripts
-RUN mv init /usr/local/bin/launch_rstudio
-
 RUN apt-get update \
     && apt-get install -y sudo \
     && echo $DEFAULT_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$DEFAULT_USER \
@@ -46,6 +28,14 @@ RUN apt-get update \
 
 RUN sed -i '/^suppressMessages(bspm::enable())/i\options(bspm.sudo = TRUE)' /lib/R/etc/Rprofile.site
 
+COPY --from=rocker /rocker_scripts/install_pandoc.sh /rocker_scripts/install_pandoc.sh
+RUN /rocker_scripts/install_pandoc.sh
+
+COPY --from=rocker /rocker_scripts/install_quarto.sh /rocker_scripts/install_quarto.sh
+RUN /rocker_scripts/install_quarto.sh
+
 EXPOSE 8787
 
-CMD ["launch_rstudio"]
+CMD ["init"]
+
+COPY --from=rocker /rocker_scripts /rocker_scripts

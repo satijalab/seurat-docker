@@ -1,6 +1,6 @@
 FROM rocker/r-ver:4.1.1 AS rocker
 
-FROM rocker/r2u:jammy AS setup-env
+FROM rocker/r2u:jammy
 
 RUN apt-get update \
     && apt-get install -y texlive \
@@ -14,13 +14,7 @@ COPY --from=rocker /rocker_scripts/install_quarto.sh /rocker_scripts/install_qua
 RUN /rocker_scripts/install_quarto.sh
 RUN rm -rf rocker_scripts
 
-
-FROM setup-env AS install-bpcells
-
 RUN apt-get update && apt-get install -y libhdf5-dev
 RUN Rscript -e 'install.packages("BPCells", repos = "https://bnprks.r-universe.dev")'
-
-
-FROM install-bpcells AS setup-workspace
 
 RUN Rscript -e 'install.packages(c("devtools"))'

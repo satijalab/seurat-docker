@@ -27,4 +27,6 @@ RUN apt-get update \
     && echo $DEFAULT_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$DEFAULT_USER \
     && chmod 0440 /etc/sudoers.d/$DEFAULT_USER
 
+EXPOSE 8787
+
 CMD ["launch_rstudio"]

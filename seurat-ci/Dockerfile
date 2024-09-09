@@ -1,5 +1,4 @@
 FROM --platform=amd64 rocker/r-ver:4.1.1 AS rocker
-
 FROM --platform=amd64 rocker/r2u:jammy
 
 ENV R_VERSION="4.4.1"
@@ -11,7 +10,7 @@ ENV LANG=en_US.UTF-8
 
 ENV RSTUDIO_VERSION="2024.04.2+764"
 ENV S6_VERSION="v2.1.0.2"
-ENV DEFAULT_USER "rstudio"
+ENV DEFAULT_USER="rstudio"
 
 COPY --from=rocker /rocker_scripts/default_user.sh /rocker_scripts/default_user.sh
 COPY --from=rocker /rocker_scripts/init_set_env.sh /rocker_scripts/init_set_env.sh
@@ -40,5 +39,6 @@ CMD ["init"]
 
 COPY --from=rocker /rocker_scripts /rocker_scripts
 
-RUN apt-get update && apt-get install -y libhdf5-dev
-RUN Rscript -e 'install.packages("BPCells", repos = "https://bnprks.r-universe.dev")'
+RUN apt-get update \
+    && apt-get install -y libhdf5-dev \ 
+    && install2.r --repos="https://bnprks.r-universe.dev" BPCells

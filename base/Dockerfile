@@ -23,9 +23,4 @@ RUN Rscript -e 'install.packages("BPCells", repos = "https://bnprks.r-universe.d
 
 FROM install-bpcells AS setup-workspace
 
-RUN Rscript -e 'install.packages(c("argparse", "devtools"))'
-
-COPY scripts/install_deps.R /usr/local/bin/r-install-deps
-COPY scripts/install_pkg.R /usr/local/bin/r-install-pkg
-COPY scripts/cran_checks.R /usr/local/bin/r-cran-checks
-COPY scripts/test_pkg.R /usr/local/bin/r-test-pkg
+RUN Rscript -e 'install.packages(c("devtools"))'

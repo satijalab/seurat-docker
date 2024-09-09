@@ -1,6 +1,6 @@
-FROM rocker/r-ver:4.4.1 AS rocker
+FROM rocker/r-ver:4.1.1 AS rocker
 
-FROM --platform=linux/amd64 satijalab/seurat-base
+FROM rocker/r2u:jammy
 
 ENV CRAN="https://p3m.dev/cran/__linux__/jammy/latest"
 ENV DEFAULT_USER "seurat-user"
@@ -10,6 +10,23 @@ ENV R_HOME="/usr/lib/R"
 ENV RSTUDIO_VERSION="2024.04.2+764"
 ENV S6_VERSION="v2.1.0.2"
 ENV TZ="Etc/UTC"
+
+RUN apt-get update \
+    && apt-get install -y texlive \
+    && apt-get install -y texlive-fonts-extra
+
+COPY --from=rocker /rocker_scripts/install_pandoc.sh /rocker_scripts/install_pandoc.sh
+RUN /rocker_scripts/install_pandoc.sh
+RUN rm -rf rocker_scripts
+
+COPY --from=rocker /rocker_scripts/install_quarto.sh /rocker_scripts/install_quarto.sh
+RUN /rocker_scripts/install_quarto.sh
+RUN rm -rf rocker_scripts
+
+RUN apt-get update && apt-get install -y libhdf5-dev
+RUN Rscript -e 'install.packages("BPCells", repos = "https://bnprks.r-universe.dev")'
+
+RUN Rscript -e 'install.packages(c("devtools"))'
 
 COPY --from=rocker /rocker_scripts/default_user.sh /rocker_scripts/default_user.sh
 COPY --from=rocker /rocker_scripts/init_set_env.sh /rocker_scripts/init_set_env.sh

@@ -1,15 +1,15 @@
 FROM rocker/r-ver:4.4.1 AS rocker
 
-FROM --platform=linux/amd64 satijalab/seurat-base AS seurat-rstudio
+FROM --platform=linux/amd64 satijalab/seurat-base
 
 ENV CRAN="https://p3m.dev/cran/__linux__/jammy/latest"
+ENV DEFAULT_USER "seurat-user"
 ENV LANG=en_US.UTF-8
 ENV R_VERSION="4.4.1"
 ENV R_HOME="/usr/lib/R"
 ENV RSTUDIO_VERSION="2024.04.2+764"
 ENV S6_VERSION="v2.1.0.2"
 ENV TZ="Etc/UTC"
-ENV DEFAULT_USER "seurat-user"
 
 COPY --from=rocker /rocker_scripts/default_user.sh /rocker_scripts/default_user.sh
 COPY --from=rocker /rocker_scripts/init_set_env.sh /rocker_scripts/init_set_env.sh

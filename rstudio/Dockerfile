@@ -27,6 +27,8 @@ RUN apt-get update \
     && echo $DEFAULT_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$DEFAULT_USER \
     && chmod 0440 /etc/sudoers.d/$DEFAULT_USER
 
+RUN sed -i '/^suppressMessages(bspm::enable())/i\options(bspm.sudo = TRUE)' /lib/R/etc/Rprofile.site
+
 EXPOSE 8787
 
 CMD ["launch_rstudio"]

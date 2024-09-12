@@ -7,6 +7,7 @@ ENV TZ="Etc/UTC"
 
 ENV CRAN="https://p3m.dev/cran/__linux__/jammy/latest"
 ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 
 ENV RSTUDIO_VERSION="2024.04.2+764"
 ENV S6_VERSION="v2.1.0.2"
@@ -38,6 +39,8 @@ EXPOSE 8787
 CMD ["init"]
 
 COPY --from=rocker /rocker_scripts /rocker_scripts
+
+RUN ln -s /init /usr/local/bin/launch_rstudio
 
 RUN apt-get update \
     && apt-get install -y libhdf5-dev \ 

@@ -2,12 +2,6 @@ FROM --platform=amd64 rocker/r2u:jammy
 
 RUN apt-get update \
     && apt-get install -y \
-        texinfo \
-        texlive-latex-recommended \
-        texlive-latex-extra \
-        texlive-fonts-recommended \
-        texlive-fonts-extra \
-        texlive-full \
         qpdf \
         libharfbuzz-dev \
         libfribidi-dev \

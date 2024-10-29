@@ -5,7 +5,6 @@ RUN apt-get update \
     && install2.r --repos="https://bnprks.r-universe.dev" BPCells
 
 RUN apt-get install -y \
-    wget \
     texlive-full \
     texlive-fonts-recommended \
     texlive-fonts-extra \
@@ -17,7 +16,10 @@ RUN apt-get install -y \
     libfribidi-dev \
     libgit2-dev
 
-RUN apt-get install -y pandoc
+RUN apt-get install -y \
+    pandoc \
+    libv8-dev \
+    tidy
 
 ENV _R_CHECK_PKG_SIZES_="false"
 ENV _R_CHECK_RD_XREFS_="false"

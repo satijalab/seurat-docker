@@ -17,12 +17,7 @@ RUN apt-get install -y \
     libfribidi-dev \
     libgit2-dev
 
-ENV PANDOC_VERSION="3.1.8"
-
-RUN wget https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-linux-amd64.tar.gz \
-    && tar -xvf pandoc-${PANDOC_VERSION}-linux-amd64.tar.gz \
-    && mv pandoc-${PANDOC_VERSION}/bin/pandoc /usr/local/bin/ \
-    && -rf pandoc-${PANDOC_VERSION}-linux-amd64.tar.gz pandoc-${PANDOC_VERSION}
+RUN apt-get install -y pandoc
 
 ENV _R_CHECK_PKG_SIZES_="false"
 ENV _R_CHECK_RD_XREFS_="false"

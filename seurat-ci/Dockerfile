@@ -37,7 +37,7 @@ RUN /rocker_scripts/install_quarto.sh
 ENV CTAN_REPO="https://mirror.ctan.org/systems/texlive/tlnet"
 ENV PATH="$PATH:/usr/local/texlive/bin/linux"
 
-COPY --from=rocker /rocker_scripts/install_verse.sh /rocker_scripts/install_verse.sh
+COPY install_verse.sh /rocker_scripts/install_verse.sh
 COPY --from=rocker /rocker_scripts/install_texlive.sh /rocker_scripts/install_texlive.sh
 RUN /rocker_scripts/install_verse.sh
 

@@ -7,6 +7,8 @@ RUN apt-get update \
     && echo $DEFAULT_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$DEFAULT_USER \
     && chmod 0440 /etc/sudoers.d/$DEFAULT_USER
 
+USER ${DEFAULT_USER}
+
 RUN apt-get update \
     && apt-get install -y libhdf5-dev \ 
     && install2.r --repos="https://bnprks.r-universe.dev" BPCells

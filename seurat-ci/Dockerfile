@@ -12,13 +12,7 @@ RUN apt-get update \
         libgit2-dev \
         pandoc \
         libv8-dev \
-        tidy \
-    && apt-get install -y \
-        r-cran-tinytex \
-    && Rscript -e 'tinytex::install_tinytex(add_path = FALSE)' \
-    && Rscript -e 'tinytex::tlmgr(c("option", "sys_bin", "/usr/local/bin"))' \
-    && Rscript -e 'tinytex::tlmgr_path()' \
-    && Rscript -e 'tinytex::tlmgr_install("makeindex")'
+        tidy
 
 ENV _R_CHECK_PKG_SIZES_="false"
 ENV _R_CHECK_RD_XREFS_="false"

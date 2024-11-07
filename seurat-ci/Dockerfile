@@ -13,13 +13,14 @@ RUN apt-get update \
         pandoc \
         libv8-dev \
         tidy
-        
+
 ENV DEFAULT_USER="docker"
 
 RUN apt-get update \
     && apt-get install -y sudo \
     && echo $DEFAULT_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$DEFAULT_USER \
-    && chmod 0440 /etc/sudoers.d/$DEFAULT_USER
+    && chmod 0440 /etc/sudoers.d/$DEFAULT_USER \
+    && sed -i '/^suppressMessages(bspm::enable())/i\options(bspm.sudo = TRUE)' /lib/R/etc/Rprofile.site
 
 USER ${DEFAULT_USER}
 

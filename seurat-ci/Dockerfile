@@ -8,7 +8,10 @@ RUN apt-get update \
         libgit2-dev \
         pandoc \
         libv8-dev \
-        tidy
+        tidy \
+    && apt-get install -y \
+        r-cran-tinytex \
+    && Rscript -e 'tinytex::install_tinytex(); tinytex::tlmgr_install("makeindex")'
 
 RUN apt-get update \
     && apt-get install -y libhdf5-dev \ 

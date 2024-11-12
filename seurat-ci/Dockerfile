@@ -11,6 +11,7 @@ ENV LC_ALL=en_US.UTF-8
 
 RUN apt-get update \
     && apt-get install r-cran-littler \
+    && rm /usr/local/bin/install2.r \
     && ln -s /usr/lib/R/site-library/littler/examples/install2.r /usr/local/bin/install2.r
 
 COPY --from=rocker /rocker_scripts/install_tidyverse.sh /rocker_scripts/install_tidyverse.sh

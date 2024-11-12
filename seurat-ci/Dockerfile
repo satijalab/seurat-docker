@@ -12,9 +12,6 @@ ENV LC_ALL=en_US.UTF-8
 COPY --from=rocker /rocker_scripts/bin/install2.r /rocker_scripts/bin/install2.r
 RUN ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r
 
-COPY --from=rocker /rocker_scripts/install_tidyverse.sh /rocker_scripts/install_tidyverse.sh
-RUN /rocker_scripts/install_tidyverse.sh
-
 ENV S6_VERSION="v2.1.0.2"
 ENV RSTUDIO_VERSION="2024.04.2+764"
 ENV DEFAULT_USER="rstudio"

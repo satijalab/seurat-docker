@@ -9,7 +9,7 @@ ENV CRAN="https://p3m.dev/cran/__linux__/jammy/latest"
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
-COPY --from=rocker /rocker_scripts/install2.sh /rocker_scripts/install2.sh
+COPY --from=rocker /rocker_scripts/install2.r /rocker_scripts/install2.r
 RUN ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r
 
 COPY --from=rocker /rocker_scripts/install_tidyverse.sh /rocker_scripts/install_tidyverse.sh

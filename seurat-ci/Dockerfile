@@ -1,5 +1,6 @@
 FROM --platform=amd64 rocker/r2u:jammy
 
+ENV R_HOME="/usr/lib/R"
 ENV USERNAME="docker"
 
 RUN apt-get update \

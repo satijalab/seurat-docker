@@ -15,6 +15,8 @@ RUN ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r
 ENV S6_VERSION="v2.1.0.2"
 ENV RSTUDIO_VERSION="2024.04.2+764"
 ENV DEFAULT_USER="rstudio"
+ENV DISABLE_AUTH="true"
+ENV ROOT="true"
 
 COPY --from=rocker /rocker_scripts/default_user.sh /rocker_scripts/default_user.sh
 COPY --from=rocker /rocker_scripts/init_set_env.sh /rocker_scripts/init_set_env.sh
@@ -23,11 +25,6 @@ COPY --from=rocker /rocker_scripts/install_rstudio.sh /rocker_scripts/install_rs
 COPY --from=rocker /rocker_scripts/install_s6init.sh /rocker_scripts/install_s6init.sh
 COPY --from=rocker /rocker_scripts/pam-helper.sh /rocker_scripts/pam-helper.sh
 RUN /rocker_scripts/install_rstudio.sh
-
-RUN apt-get update \
-    && apt-get install -y sudo \
-    && echo $DEFAULT_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$DEFAULT_USER \
-    && chmod 0440 /etc/sudoers.d/$DEFAULT_USER
 
 RUN sed -i '/^suppressMessages(bspm::enable())/i\options(bspm.sudo = TRUE)' /lib/R/etc/Rprofile.site
 

@@ -1,5 +1,6 @@
 FROM --platform=amd64 rocker/r2u:noble
 
+ENV USERNAME="root"
 RUN mkdir /home/root/
 
 RUN sed -i '/^suppressMessages(bspm::enable())/i\options(bspm.sudo = TRUE)' /lib/R/etc/Rprofile.site

@@ -11,4 +11,4 @@ RUN /rstudio_scripts/install.sh
 
 EXPOSE 8787
 
-CMD ["rserver", "--server-daemonize=0"]
+CMD ["sudo", "-u", "docker", "rserver", "--server-daemonize=0"]

@@ -174,12 +174,8 @@ if [ "${SINGLE_USER}" = "true" ]; then
     set_single_user_mode
 fi
 
-
-# Make RStudio compatible with case when R is built from source
-# (and thus is at /usr/local/bin/R), because RStudio doesn't obey
-# path if a user apt-get installs a package
-R_BIN="$(which R)"
-echo "rsession-which-r=${R_BIN}" >/etc/rstudio/rserver.conf
+# RStudio wants an /etc/R, will populate from $R_HOME/etc
+mkdir -p /etc/R
 
 echo "Create symlinks for RStudio Server binaries..."
 ln -fs /usr/lib/rstudio-server/bin/rstudio-server /usr/local/bin

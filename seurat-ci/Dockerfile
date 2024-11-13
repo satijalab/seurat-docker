@@ -9,6 +9,15 @@ RUN apt-get update \
 
 RUN sed -i '/^suppressMessages(bspm::enable())/i\options(bspm.sudo = TRUE)' /lib/R/etc/Rprofile.site
 
+RUN mkdir -p /home/$USERNAME/.config/rstudio && \
+    echo '{ \
+        "theme": "Modern", \
+        "save_workspace": "never", \
+        "always_save_history": false, \
+        "posix_terminal_shell": "bash", \
+    }' > /home/$USERNAME/.config/rstudio/rstudio-prefs.json && \
+    chown -R $USERNAME:$USERNAME /home/$USERNAME/.config/rstudio
+
 COPY rstudio_scripts/install.sh /rstudio_scripts/install.sh
 COPY rstudio_scripts/oncreate.sh /rstudio_scripts/oncreate.sh
 RUN /rstudio_scripts/install.sh

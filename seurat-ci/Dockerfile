@@ -18,7 +18,7 @@ RUN mkdir -p /home/$USERNAME/.config/rstudio \
     "always_save_history": false,
     "posix_terminal_shell": "bash",
     "initial_working_directory": "~",
-    "editor_theme": "Pastel On Dark",
+    "editor_theme": "Pastel On Dark"
 } 
 EOF
 

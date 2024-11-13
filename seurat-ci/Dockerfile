@@ -1,4 +1,4 @@
-FROM --platform=amd64 rocker/r2u:noble
+FROM --platform=amd64 rocker/r2u:jammy
 
 ENV USERNAME="docker"
 

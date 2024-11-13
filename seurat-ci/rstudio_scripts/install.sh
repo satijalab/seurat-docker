@@ -174,8 +174,6 @@ if [ "${SINGLE_USER}" = "true" ]; then
     set_single_user_mode
 fi
 
-# RStudio wants an /etc/R, will populate from $R_HOME/etc
-mkdir -p /etc/R
 
 # Make RStudio compatible with case when R is built from source
 # (and thus is at /usr/local/bin/R), because RStudio doesn't obey

@@ -14,10 +14,11 @@ RUN mkdir -p /home/$USERNAME/.config/rstudio \
     && chown -R $USERNAME:$USERNAME /home/$USERNAME/.config/rstudio \
     && cat <<EOF > /home/$USERNAME/.config/rstudio/rstudio-prefs.json
 {
-    "theme": "Pastel On Dark",
     "save_workspace": "never",
     "always_save_history": false,
-    "posix_terminal_shell": "bash"
+    "posix_terminal_shell": "bash",
+    "initial_working_directory": "~",
+    "editor_theme": "Pastel On Dark",
 } 
 EOF
 

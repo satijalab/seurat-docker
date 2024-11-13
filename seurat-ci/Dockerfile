@@ -10,9 +10,11 @@ RUN apt-get update \
 RUN sed -i '/^suppressMessages(bspm::enable())/i\options(bspm.sudo = TRUE)' /lib/R/etc/Rprofile.site
 
 RUN mkdir -p /home/$USERNAME/.config/rstudio \
+    && touch /home/$USERNAME/.config/rstudio/rstudio-prefs.json \
+    && chown -R $USERNAME:$USERNAME /home/$USERNAME/.config/rstudio \
     && cat <<EOF > /home/$USERNAME/.config/rstudio/rstudio-prefs.json
 {
-    "theme": "Modern",
+    "theme": "Pastel On Dark",
     "save_workspace": "never",
     "always_save_history": false,
     "posix_terminal_shell": "bash"

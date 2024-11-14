@@ -60,3 +60,9 @@ RUN mkdir -p /home/$DEFAULT_USER/.config/rstudio \
     "editor_theme": "Pastel On Dark"
 } 
 EOF
+
+RUN apt-get update \
+    && apt-get install -y \
+        r-cran-plotly \
+        r-cran-v8 \
+        tidy

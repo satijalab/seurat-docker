@@ -40,5 +40,3 @@ COPY --from=rocker /rocker_scripts/install_texlive.sh /rocker_scripts/install_te
 RUN /rocker_scripts/install_verse.sh
 
 COPY --from=rocker /rocker_scripts /rocker_scripts
-
-RUN ln -s /init /usr/local/bin/launch_rstudio

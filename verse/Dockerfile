@@ -47,3 +47,16 @@ RUN /rocker_scripts/install_verse.sh
 COPY --from=rocker /rocker_scripts /rocker_scripts
 
 RUN ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r
+
+RUN mkdir -p /home/$USERNAME/.config/rstudio \
+    && touch /home/$USERNAME/.config/rstudio/rstudio-prefs.json \
+    && chown -R $USERNAME:$USERNAME /home/$USERNAME/.config/rstudio \
+    && cat <<EOF > /home/$USERNAME/.config/rstudio/rstudio-prefs.json
+{
+    "save_workspace": "never",
+    "always_save_history": false,
+    "posix_terminal_shell": "bash",
+    "initial_working_directory": "~",
+    "editor_theme": "Pastel On Dark"
+} 
+EOF

@@ -1,5 +1,5 @@
 FROM --platform=amd64 rocker/r-ver:latest AS rocker
-FROM --platform=amd64 rocker/r2u:noble
+FROM --platform=amd64 rocker/r2u:jammy
 
 RUN apt-get update \
     && apt-get install -y libhdf5-dev \ 

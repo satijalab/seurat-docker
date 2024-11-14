@@ -1,20 +1,11 @@
 FROM --platform=amd64 rocker/r-ver:4.1.1 AS rocker
 FROM --platform=amd64 rocker/r2u:jammy
 
-ENV R_VERSION="4.4.1"
-ENV R_HOME="/usr/lib/R"
-ENV TZ="Etc/UTC"
-
-ENV CRAN="https://p3m.dev/cran/__linux__/jammy/latest"
-ENV LANG=en_US.UTF-8
-ENV LC_ALL=en_US.UTF-8
-
 COPY --from=rocker /rocker_scripts/bin/install2.r /rocker_scripts/bin/install2.r
 RUN ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r
 
-ENV S6_VERSION="v2.1.0.2"
-ENV RSTUDIO_VERSION="2024.04.2+764"
-ENV DEFAULT_USER="rstudio"
+ENV R_HOME="/usr/lib/R"
+ENV DEFAULT_USER="docker"
 ENV DISABLE_AUTH="true"
 ENV ROOT="true"
 

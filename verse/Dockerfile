@@ -1,6 +1,10 @@
 FROM --platform=amd64 rocker/r-ver:latest AS rocker
 FROM --platform=amd64 rocker/r2u:noble
 
+RUN apt-get update \
+    && apt-get install -y libhdf5-dev \ 
+    && install2.r --repos="https://bnprks.r-universe.dev" BPCells
+
 COPY --from=rocker /rocker_scripts/bin/install2.r /rocker_scripts/bin/install2.r
 RUN ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r
 
@@ -38,7 +42,3 @@ RUN /rocker_scripts/install_verse.sh
 COPY --from=rocker /rocker_scripts /rocker_scripts
 
 RUN ln -s /init /usr/local/bin/launch_rstudio
-
-RUN apt-get update \
-    && apt-get install -y libhdf5-dev \ 
-    && install2.r --repos="https://bnprks.r-universe.dev" BPCells

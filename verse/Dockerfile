@@ -73,5 +73,4 @@ if [[ -d "$PACKAGE_DIR" ]]; then
     R CMD INSTALL ${PACKAGE_DIR}
 fi
 PASSWORD="${PASSWORD:-...}" ./init
-EOF \
-    && chmod +x /usr/local/bin/init_session
+EOF && chmod +x /usr/local/bin/init_session

@@ -5,7 +5,7 @@ RUN apt-get update \
     && apt-get install -y libhdf5-dev \ 
     && install2.r --repos="https://bnprks.r-universe.dev" BPCells
 
-COPY --from=rocker /rocker_scripts/bin/install2.r /rocker_scripts/bin/install2.r
+COPY --from=rocker /rocker_scripts/bin/ /rocker_scripts/bin/
 RUN ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r
 
 ENV R_HOME="/usr/lib/R"

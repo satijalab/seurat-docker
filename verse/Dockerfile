@@ -11,7 +11,7 @@ RUN ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r
 ENV R_HOME="/usr/lib/R"
 
 COPY --from=rocker /rocker_scripts/install_tidyverse.sh /rocker_scripts/install_tidyverse.sh
-RUN sed -i '/^strip \/usr\/local\/lib\/R\/site-library\/\*\/libs\/\*\.so$/d' \
+RUN sed -i '/^strip \/usr\/local\/lib\/R\/site-library\/\*\/libs\/\*\.so$/d' /rocker_scripts/install_tidyverse.sh \
     && /rocker_scripts/install_tidyverse.sh
 
 ENV DEFAULT_USER="docker"

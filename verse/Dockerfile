@@ -48,10 +48,10 @@ COPY --from=rocker /rocker_scripts /rocker_scripts
 
 RUN ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r
 
-RUN mkdir -p /home/$USERNAME/.config/rstudio \
-    && touch /home/$USERNAME/.config/rstudio/rstudio-prefs.json \
-    && chown -R $USERNAME:$USERNAME /home/$USERNAME/.config/rstudio \
-    && cat <<EOF > /home/$USERNAME/.config/rstudio/rstudio-prefs.json
+RUN mkdir -p /home/$DEFAULT_USER/.config/rstudio \
+    && touch /home/$DEFAULT_USER/.config/rstudio/rstudio-prefs.json \
+    && chown -R $DEFAULT_USER:$DEFAULT_USER /home/$DEFAULT_USER/.config/rstudio \
+    && cat <<EOF > /home/$DEFAULT_USER/.config/rstudio/rstudio-prefs.json
 {
     "save_workspace": "never",
     "always_save_history": false,

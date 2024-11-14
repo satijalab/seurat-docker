@@ -29,7 +29,7 @@ RUN /rocker_scripts/install_rstudio.sh
 RUN sed -i '/^suppressMessages(bspm::enable())/i\options(bspm.sudo = TRUE)' /lib/R/etc/Rprofile.site
 
 EXPOSE 8787
-CMD ["init"]
+CMD ["/init"]
 
 COPY --from=rocker /rocker_scripts/install_pandoc.sh /rocker_scripts/install_pandoc.sh
 RUN /rocker_scripts/install_pandoc.sh

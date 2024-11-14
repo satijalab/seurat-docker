@@ -1,5 +1,5 @@
-FROM --platform=amd64 rocker/r-ver:4.1.1 AS rocker
-FROM --platform=amd64 rocker/r2u:jammy
+FROM --platform=amd64 rocker/r-ver:latest AS rocker
+FROM --platform=amd64 rocker/r2u:noble
 
 COPY --from=rocker /rocker_scripts/bin/install2.r /rocker_scripts/bin/install2.r
 RUN ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r

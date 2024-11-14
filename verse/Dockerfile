@@ -65,9 +65,7 @@ RUN apt-get update \
     && apt-get install -y tidy \
     && install2.r plotly V8
 
-RUN touch /usr/local/bin/init_session \
-    && chmod +x /usr/local/bin/init_session \
-    && cat <<'EOF' > /usr/local/bin/init_session \
+RUN cat <<'EOF' > /usr/local/bin/init_session
 #!/bin/bash
 set -e
 if [[ -d "$PACKAGE_DIR" ]]; then
@@ -75,4 +73,5 @@ if [[ -d "$PACKAGE_DIR" ]]; then
     R CMD INSTALL ${PACKAGE_DIR}
 fi
 PASSWORD="${PASSWORD:-...}" ./init
-EOF
+EOF \
+    && chmod +x /usr/local/bin/init_session

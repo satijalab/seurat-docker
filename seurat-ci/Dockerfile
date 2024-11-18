@@ -20,3 +20,7 @@ FROM rocker/r-ver:latest AS rocker
 # available for R-release, this setup is not compatible with any other versions 
 # of R. See https://eddelbuettel.github.io/r2u/ for more details.  
 FROM rocker/r2u:noble
+
+# Use install_pandoc.sh from Rocker's versioned stack.
+COPY --from=rocker /rocker_scripts/install_pandoc.sh /rocker_scripts/install_pandoc.sh
+RUN /rocker_scripts/install_pandoc.sh

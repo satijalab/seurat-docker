@@ -45,10 +45,6 @@ RUN ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r
 COPY --from=rocker /rocker_scripts/install_pandoc.sh /rocker_scripts/install_pandoc.sh
 RUN /rocker_scripts/install_pandoc.sh
 
-# Use install_quarto.sh from Rocker's versioned stack.
-COPY --from=rocker /rocker_scripts/install_quarto.sh /rocker_scripts/install_quarto.sh
-RUN /rocker_scripts/install_quarto.sh
-
 # Set a CTAN mirror and add `texlive` to the PATH.
 ENV CTAN_REPO="https://mirror.ctan.org/systems/texlive/tlnet"
 ENV PATH="$PATH:/usr/local/texlive/bin/linux"

@@ -21,6 +21,16 @@ FROM rocker/r-ver:latest AS rocker
 # of R. See https://eddelbuettel.github.io/r2u/ for more details.  
 FROM rocker/r2u:noble
 
+# Copy install2.r from Rocker's versioned stack and update the symlink to 
+# /usr/local/bin. This version differs from the one provided by `littler` 
+# (and installed in the base image) in two ways:
+#   1. It does not provide a `--type` flag
+#   2. It exposes an additional `--skipmissing` flag
+# The latter is used by install_verse.sh but it's probably best to make sure
+# that we're using the intended version for all scripts rocker scripts. 
+COPY --from=rocker /rocker_scripts/bin/ /rocker_scripts/bin/
+RUN ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r
+
 # Use install_pandoc.sh from Rocker's versioned stack.
 COPY --from=rocker /rocker_scripts/install_pandoc.sh /rocker_scripts/install_pandoc.sh
 RUN /rocker_scripts/install_pandoc.sh

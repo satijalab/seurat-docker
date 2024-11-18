@@ -19,7 +19,7 @@ FROM rocker/r-ver:latest AS rocker
 # reliable. The downside is that since r2u only makes precompiled binaries 
 # available for R-release, this setup is not compatible with any other versions 
 # of R. See https://eddelbuettel.github.io/r2u/ for more details.  
-FROM rocker/r2u:noble
+FROM rocker/r2u:jammy
 
 # Copy install2.r from Rocker's versioned stack and update the symlink to 
 # /usr/local/bin. This version differs from the one provided by `littler` 

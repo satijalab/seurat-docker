@@ -24,3 +24,7 @@ FROM rocker/r2u:noble
 # Use install_pandoc.sh from Rocker's versioned stack.
 COPY --from=rocker /rocker_scripts/install_pandoc.sh /rocker_scripts/install_pandoc.sh
 RUN /rocker_scripts/install_pandoc.sh
+
+# Use install_quarto.sh from Rocker's versioned stack.
+COPY --from=rocker /rocker_scripts/install_quarto.sh /rocker_scripts/install_quarto.sh
+RUN /rocker_scripts/install_quarto.sh

@@ -21,6 +21,16 @@ FROM rocker/r-ver:latest AS rocker
 # of R. See https://eddelbuettel.github.io/r2u/ for more details.  
 FROM rocker/r2u:jammy
 
+# Install some tools for running CRAN checks.
+RUN apt update \
+    && apt install -y --no-install-recommends \ 
+        # System dependencies.
+        tidy \
+        # R packages (brought to you by r2u).
+        r-cran-devtools \
+        r-cran-plotly \
+        r-cran-v8
+
 # Copy install2.r from Rocker's versioned stack and update the symlink to 
 # /usr/local/bin. This version differs from the one provided by `littler` 
 # (and installed in the base image) in two ways:

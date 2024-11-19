@@ -69,3 +69,8 @@ ENV _R_CHECK_PKG_SIZES_="false"
 ENV _R_CHECK_RD_XREFS_="false"
 ENV _R_CHECK_CRAN_INCOMING_NOTE_GNU_MAKE_="false"
 ENV _R_CHECK_PACKAGE_DATASETS_SUPPRESS_NOTES_="true"
+
+# Remove scripts copied from `rocker/r-ver` and point /usr/local/bin/install2.r 
+# back to the littler version. 
+RUN ln -sf /usr/lib/R/site-library/littler/examples/install2.r /usr/local/bin/install2.r \
+    && rm -rf /rocker_scripts/

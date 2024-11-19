@@ -61,3 +61,11 @@ RUN apt update \
 # Include custom script for installing _all_ dependencies of a local package:
 # "Depends", "Imports", "LinkingTo", "Suggests", and "Enhances".
 COPY scripts/installAllDeps.r /usr/local/bin/installAllDeps.r
+
+# Set environment variables to suppress NOTEs that are accepted by CRAN, see
+# https://www.rdocumentation.org/packages/rcmdcheck/versions/1.4.0/topics/rcmdcheck
+# for more details. 
+ENV _R_CHECK_PKG_SIZES_="false"
+ENV _R_CHECK_RD_XREFS_="false"
+ENV _R_CHECK_CRAN_INCOMING_NOTE_GNU_MAKE_="false"
+ENV _R_CHECK_PACKAGE_DATASETS_SUPPRESS_NOTES_="true"

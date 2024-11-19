@@ -2,15 +2,6 @@
 # workflows for https://github.com/satijalab/seurat and its related projects
 # (e.g. https://github.com/satijalab/seurat-object).
 
-# Use multi-stage builds to make it convenient to copy scripts from the Rocker 
-# Project's versioned stack. We can take advantage of the fact that every
-# image in the stack comes configured with a complete set of install scripts 
-# and just import the smallest image of the bunch, `rocker/r-ver`. See 
-# https://rocker-project.org/images/#the-versioned-stack for more details. 
-# TODO: consider vendorizing the rocker_scripts/ directy into `seurat-docker`
-# and introducing a script to sync the scripts with https://github.com/rocker-org/rocker-versioned2.
-FROM rocker/r-ver:latest AS rocker
-
 # Use `rocker/r2u` as the base image.
 # The r2u Project provides precompiled Ubuntu binaries for all CRAN packages 
 # and their BioConductor dependencies accessible via `apt`. With `bspm` enabled, 
@@ -18,40 +9,37 @@ FROM rocker/r-ver:latest AS rocker
 # The main advantage of this setup is that installs are faster and more 
 # reliable. The downside is that since r2u only makes precompiled binaries 
 # available for R-release, this setup is not compatible with any other versions 
-# of R. See https://eddelbuettel.github.io/r2u/ for more details.  
+# of R. See https://eddelbuettel.github.io/r2u/ for more details.
 FROM rocker/r2u:jammy
-
-# Install some tools for running CRAN checks.
-RUN apt update \
-    && apt install -y --no-install-recommends \ 
-        # System dependencies.
-        tidy \
-        # R packages (brought to you by r2u).
-        r-cran-devtools \
-        r-cran-plotly \
-        r-cran-v8
-
-# Copy install2.r from Rocker's versioned stack and update the symlink to 
-# /usr/local/bin. This version differs from the one provided by `littler` 
-# (and installed in the base image) in two ways:
-#   1. It does not provide a `--type` flag
-#   2. It exposes an additional `--skipmissing` flag
-# The latter is used by install_verse.sh but it's probably best to make sure
-# that we're using the intended version for all scripts rocker scripts. 
-COPY --from=rocker /rocker_scripts/bin/ /rocker_scripts/bin/
-RUN ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r
-
-# Use install_pandoc.sh from Rocker's versioned stack.
-COPY --from=rocker /rocker_scripts/install_pandoc.sh /rocker_scripts/install_pandoc.sh
-RUN /rocker_scripts/install_pandoc.sh
 
 # Set a CTAN mirror and add `texlive` to the PATH.
 ENV CTAN_REPO="https://mirror.ctan.org/systems/texlive/tlnet"
 ENV PATH="$PATH:/usr/local/texlive/bin/linux"
 
-# Use install_texlive.sh from Rocker's versioned stack.
-COPY --from=rocker /rocker_scripts/install_texlive.sh /rocker_scripts/install_texlive.sh
-RUN apt update /
-    # Include system dependencies not covered by the script. 
-    && apt install texinfo
+# In addition to `rocker/r2u` images, the Rocker Project also provides a 
+# set of images that comes with a set of shared setup scripts providing tools
+# from `pandoc` and `texlive` to `python` and `CUDA`, see
+# https://rocker-project.org/images/#the-versioned-stack for more details. 
+#
+# Using multi-stage builds we can pull these scripts direclty from the 
+# `rocker/r-ver` image and use them to install the things we need. 
+#
+# TODO: consider vendorizing rocker_scripts/ directy into seurat-docker
+# and introducing a workflow to keeps its contents in sync with
+# https://github.com/rocker-org/rocker-versioned2/tree/master/scripts. 
+COPY --from=rocker/r-ver:latest /rocker_scripts/bin/ /rocker_scripts/bin/
+COPY --from=rocker/r-ver:latest /rocker_scripts/install_pandoc.sh /rocker_scripts/install_pandoc.sh
+COPY --from=rocker/r-ver:latest /rocker_scripts/install_texlive.sh /rocker_scripts/install_texlive.sh
+RUN apt update \
+    && apt install -y --no-install-recommends \ 
+        # System dependencies not covered by ...
+        texinfo \
+        tidy \
+        # R packages (brought to you by r2u).
+        r-cran-devtools \
+        r-cran-plotly \
+        r-cran-v8 \
+    # ...
+    && ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r \
+    && /rocker_scripts/install_pandoc.sh \
     && /rocker_scripts/install_texlive.sh

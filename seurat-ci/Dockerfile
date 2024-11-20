@@ -18,8 +18,8 @@ ENV PATH="$PATH:/usr/local/texlive/bin/linux"
 
 # In addition to `rocker/r2u` images, the Rocker Project also provides a 
 # set of images that comes with a set of shared setup scripts providing tools 
-# from `pandoc` and `texlive` to `python` and `CUDA`, see 
-# https://rocker-project.org/images/#the-versioned-stack for more details.
+# from `pandoc` and `texlive` to `python` and `CUDA`, for more details, see
+# https://github.com/rocker-org/rocker-versioned2?tab=readme-ov-file#rocker-scripts.
 #
 # Using multi-stage builds we can pull these scripts direclty from the 
 # `rocker/r-ver` image and use them to install the things we need.

@@ -58,10 +58,6 @@ RUN apt update \
     && apt install -y libhdf5-dev \ 
     && Rscript -e 'install.packages("BPCells", repos = "https://bnprks.r-universe.dev")'
 
-# Include custom script for installing _all_ dependencies of a local package:
-# "Depends", "Imports", "LinkingTo", "Suggests", and "Enhances".
-COPY scripts/installAllDeps.r /usr/local/bin/installAllDeps.r
-
 # Set environment variables to suppress NOTEs that are accepted by CRAN, see
 # https://www.rdocumentation.org/packages/rcmdcheck/versions/1.4.0/topics/rcmdcheck
 # for more details. 

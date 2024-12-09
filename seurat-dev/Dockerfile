@@ -8,7 +8,7 @@
 # reliable. The downside is that since r2u only makes precompiled binaries 
 # available for R-release, this setup is not compatible with any other versions 
 # of R. See https://eddelbuettel.github.io/r2u/ for more details.
-FROM rocker/r2u:jammy
+FROM rocker/r2u:jammy AS base
 
 # Set a CTAN mirror and add `texlive` to the PATH.
 ENV CTAN_REPO="https://mirror.ctan.org/systems/texlive/tlnet"
@@ -63,6 +63,12 @@ ENV _R_CHECK_PKG_SIZES_="false"
 ENV _R_CHECK_RD_XREFS_="false"
 ENV _R_CHECK_CRAN_INCOMING_NOTE_GNU_MAKE_="false"
 ENV _R_CHECK_PACKAGE_DATASETS_SUPPRESS_NOTES_="true"
+
+
+# Define a stage for the `satijalab/seurat-ci` image, intended for running CI 
+# workflows for https://github.com/satijalab/seurat and its related projects 
+# (e.g. https://github.com/satijalab/seurat-object).
+FROM base AS seurat-ci
 
 # Remove scripts copied from `rocker/r-ver` and point /usr/local/bin/install2.r 
 # back to the littler version. 

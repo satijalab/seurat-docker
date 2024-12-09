@@ -74,3 +74,42 @@ FROM base AS seurat-ci
 # back to the littler version. 
 RUN ln -sf /usr/lib/R/site-library/littler/examples/install2.r /usr/local/bin/install2.r \
     && rm -rf /rocker_scripts/
+
+
+# Define a stage for the `satijalab/seurat-dev` image, intended for use as a 
+# development environment. 
+FROM base AS seurat-dev
+
+# [blank]
+ENV ROOT="true"
+
+# [blank]
+COPY --from=rocker /rocker_scripts/default_user.sh /rocker_scripts/default_user.sh
+COPY --from=rocker /rocker_scripts/init_set_env.sh /rocker_scripts/init_set_env.sh
+COPY --from=rocker /rocker_scripts/init_userconf.sh /rocker_scripts/init_userconf.sh
+COPY --from=rocker /rocker_scripts/install_rstudio.sh /rocker_scripts/install_rstudio.sh
+COPY --from=rocker /rocker_scripts/install_s6init.sh /rocker_scripts/install_s6init.sh
+COPY --from=rocker /rocker_scripts/pam-helper.sh /rocker_scripts/pam-helper.sh
+RUN /rocker_scripts/install_rstudio.sh \
+    # [blank]
+    && sed -i '/^suppressMessages(bspm::enable())/i\options(bspm.sudo = TRUE)' /lib/R/etc/Rprofile.site \
+    # [blank]
+    && ln -sf /init /usr/local/bin/launch_rstudio \
+    # [blank]
+    && cat <<EOF > /etc/rstudio/rstudio-prefs.json
+{
+    "save_workspace": "never",
+    "always_save_history": false,
+    "posix_terminal_shell": "bash",
+    "initial_working_directory": "~",
+    "editor_theme": "Pastel On Dark"
+} 
+EOF
+
+# [blank]
+EXPOSE 8787
+
+# Remove scripts copied from `rocker/r-ver` and point /usr/local/bin/install2.r 
+# back to the littler version. 
+RUN ln -sf /usr/lib/R/site-library/littler/examples/install2.r /usr/local/bin/install2.r \
+    && rm -rf /rocker_scripts/

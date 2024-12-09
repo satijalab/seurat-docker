@@ -1,6 +1,4 @@
-# Dockerfile for the `satijalab/seurat-ci` image, intended for running CI 
-# workflows for https://github.com/satijalab/seurat and its related projects 
-# (e.g. https://github.com/satijalab/seurat-object).
+# Dockerfile for the `satijalab/seurat-ci` and `satijalab/seurat-dev` images.
 
 # Use `rocker/r2u` as the base image.
 # The r2u Project provides precompiled Ubuntu binaries for all CRAN packages 

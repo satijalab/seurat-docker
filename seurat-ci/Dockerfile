@@ -49,7 +49,10 @@ RUN apt update \
     # best to make sure that we're using the intended version just to be safe.
     && ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r \
     && /rocker_scripts/install_pandoc.sh \
-    && /rocker_scripts/install_texlive.sh
+    && /rocker_scripts/install_texlive.sh \
+    && export PATH="/usr/local/texlive/bin/linux:$PATH" \
+    # Install amsfonts separately for PDF manual generation, which is checked by CRAN.
+    && tlmgr install amsfonts
 
 # Install `BPCells`. Since it is not available on CRAN or BioConductor, the 
 # package needs to be installed from source. This is quite slow, hence why

@@ -10,7 +10,7 @@
 # reliable. The downside is that since r2u only makes precompiled binaries 
 # available for R-release, this setup is not compatible with any other versions 
 # of R. See https://eddelbuettel.github.io/r2u/ for more details.
-FROM rocker/r2u:jammy
+FROM rocker/r2u:noble
 
 # Set a CTAN mirror and add `texlive` to the PATH.
 ENV CTAN_REPO="https://mirror.ctan.org/systems/texlive/tlnet"
@@ -54,12 +54,18 @@ RUN apt update \
     # Install amsfonts separately for PDF manual generation, which is checked by CRAN.
     && tlmgr install amsfonts
 
-# Install `BPCells`. Since it is not available on CRAN or BioConductor, the 
-# package needs to be installed from source. This is quite slow, hence why
-# this is the only `Seurat` dependency being explicitly pre-installed. 
+# Install `BPCells` and `presto`, both only available from specific repositories.
+# Since they are not available on CRAN or BioConductor, these
+# packages need to be installed from source (r-universe).
+# NOTE: BPCells installation is quite slow.
+# NOTE: RcppArmadillo is pinned to 15.2.4-1; newer releases require
+# C++14 while `presto` declares `CXX_STD = CXX11`.
 RUN apt update \
     && apt install -y libhdf5-dev \ 
-    && Rscript -e 'install.packages("BPCells", repos = "https://bnprks.r-universe.dev")'
+    && Rscript -e "\
+options(repos = c(bnprks='https://bnprks.r-universe.dev', satijalab='https://satijalab.r-universe.dev')); \
+remotes::install_version('RcppArmadillo', version='15.2.4-1', repos='https://cloud.r-project.org'); \
+pak::pkg_install(c('BPCells','presto'))"
 
 # Set environment variables to suppress NOTEs that are accepted by CRAN, see
 # https://www.rdocumentation.org/packages/rcmdcheck/versions/1.4.0/topics/rcmdcheck

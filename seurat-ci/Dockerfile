@@ -10,7 +10,7 @@
 # reliable. The downside is that since r2u only makes precompiled binaries 
 # available for R-release, this setup is not compatible with any other versions 
 # of R. See https://eddelbuettel.github.io/r2u/ for more details.
-FROM rocker/r2u:jammy
+FROM rocker/r2u:noble
 
 # Set a CTAN mirror and add `texlive` to the PATH.
 ENV CTAN_REPO="https://mirror.ctan.org/systems/texlive/tlnet"

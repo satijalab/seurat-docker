@@ -30,6 +30,7 @@ RUN apt-get update && \
         libgdal-dev \
         libgeos-dev \
         libglpk-dev \
+        libgsl-dev \
         libicu-dev \
         libpng-dev \
         libxml2-dev \
@@ -73,7 +74,11 @@ RUN Rscript -e "\
 options(repos=c(bnprks='https://bnprks.r-universe.dev', \
         satijalab='https://satijalab.r-universe.dev', \
         cran='https://cloud.r-project.org')); \
-pak::pkg_install(c('BPCells','RcppArmadillo@15.2.4-1','presto'))" && \
+pak::pkg_install(c('BPCells', 'presto'))" && \
+    rm -rf /root/.cache/R /tmp/*
+
+# Install SeuratData
+RUN Rscript -e "pak::pkg_install('satijalab/seurat-data')" && \
     rm -rf /root/.cache/R /tmp/*
 
 # Install Seurat

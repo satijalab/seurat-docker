@@ -13,10 +13,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         texinfo \
         tidy \
-        # R packages (brought to you by r2u).
-        r-cran-devtools \
-        r-cran-plotly \
-        r-cran-v8 \
+        libhdf5-dev \
     # The `install2.r` script comes from the `littler` package and is included 
     # under `/usr/local/bin/` by the base image. The version found under 
     # `/rocker_scripts/bin/install2.r` differs from the `littler` version in 

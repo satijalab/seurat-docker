@@ -9,23 +9,8 @@ ENV PAK_PPM_URL="${RSPM}"
 ENV CTAN_REPO="https://mirror.ctan.org/systems/texlive/tlnet"
 ENV PATH="$PATH:/usr/local/texlive/bin/linux"
 
-# In addition to `rocker/r2u` images, the Rocker Project also provides a 
-# set of images that comes with a set of shared setup scripts providing tools 
-# from `pandoc` and `texlive` to `python` and `CUDA`, for more details, see
-# https://github.com/rocker-org/rocker-versioned2?tab=readme-ov-file#rocker-scripts.
-#
-# Using multi-stage builds we can pull these scripts direclty from the 
-# `rocker/r-ver` image and use them to install the things we need.
-#
-# TODO: consider vendorizing rocker_scripts/ directy into seurat-docker 
-# and introducing a workflow to keeps its contents in sync with 
-# https://github.com/rocker-org/rocker-versioned2/tree/master/scripts.
-COPY --from=rocker/r-ver:latest /rocker_scripts/bin/ /rocker_scripts/bin/
-COPY --from=rocker/r-ver:latest /rocker_scripts/install_pandoc.sh /rocker_scripts/install_pandoc.sh
-COPY --from=rocker/r-ver:latest /rocker_scripts/install_texlive.sh /rocker_scripts/install_texlive.sh
-RUN apt update \
-    && apt install -y --no-install-recommends \ 
-        # System dependencies not covered by the copied scripts.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
         texinfo \
         tidy \
         # R packages (brought to you by r2u).
@@ -45,20 +30,23 @@ RUN apt update \
     && /rocker_scripts/install_texlive.sh \
     && export PATH="/usr/local/texlive/bin/linux:$PATH" \
     # Install amsfonts separately for PDF manual generation, which is checked by CRAN.
-    && tlmgr install amsfonts
+    && tlmgr install amsfonts \
+    # Set a single binary-capable repo for CRAN + Bioconductor
+    && echo "options(repos = c(CRAN = Sys.getenv('RSPM')))" >> "$(R RHOME)/etc/Rprofile.site" \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install `BPCells` and `presto`, both only available from specific repositories.
-# Since they are not available on CRAN or BioConductor, these
-# packages need to be installed from source (r-universe).
+# Install R packages with littler scripts
+RUN install2.r --error --skipinstalled --ncpus -1 \
+    -r ${RSPM} \
+    BiocManager devtools pak plotly remotes V8
+
+# Install `BPCells` and `presto`, both only available from specific r-universe repositories.
 # NOTE: BPCells installation is quite slow.
-# NOTE: RcppArmadillo is pinned to 15.2.4-1; newer releases require
-# C++14 while `presto` declares `CXX_STD = CXX11`.
-RUN apt update \
-    && apt install -y libhdf5-dev \ 
-    && Rscript -e "\
-options(repos = c(bnprks='https://bnprks.r-universe.dev', satijalab='https://satijalab.r-universe.dev')); \
-remotes::install_version('RcppArmadillo', version='15.2.4-1', repos='https://cloud.r-project.org'); \
-pak::pkg_install(c('BPCells','presto'))"
+RUN install2.r --error --skipinstalled --ncpus -1 \
+      -r https://bnprks.r-universe.dev \
+      -r https://satijalab.r-universe.dev \
+    -r ${RSPM} \
+      BPCells presto
 
 # Set environment variables to suppress NOTEs that are accepted by CRAN, see
 # https://www.rdocumentation.org/packages/rcmdcheck/versions/1.4.0/topics/rcmdcheck

@@ -2,10 +2,14 @@
 # workflows for https://github.com/satijalab/seurat and its related projects 
 # (e.g. https://github.com/satijalab/seurat-object).
 
+# rocker/r-ver provides reproducible builds to fixed versions of R
+# See https://rocker-project.org/images/versioned/r-ver.html
 FROM rocker/r-ver:4.6.1
 
+# Use Posit's RSPM (RStudio Package Manager) for installing packages.
 ENV RSPM="https://packagemanager.posit.co/all/__linux__/noble/latest"
 ENV PAK_PPM_URL="${RSPM}"
+# Set a CTAN mirror and add `texlive` to the PATH.
 ENV CTAN_REPO="https://mirror.ctan.org/systems/texlive/tlnet"
 ENV PATH="$PATH:/usr/local/texlive/bin/linux"
 
@@ -14,14 +18,7 @@ RUN apt-get update \
         texinfo \
         tidy \
         libhdf5-dev \
-    # The `install2.r` script comes from the `littler` package and is included 
-    # under `/usr/local/bin/` by the base image. The version found under 
-    # `/rocker_scripts/bin/install2.r` differs from the `littler` version in 
-    # two ways:
-    #   1. It does not provide a `--type` flag
-    #   2. It exposes an additional `--skipmissing` flag
-    # Neither flag is actually used in the following scripts but it's probably 
-    # best to make sure that we're using the intended version just to be safe.
+    # The `install2.r` script is available as part of the `littler` package
     && ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r \
     && /rocker_scripts/install_pandoc.sh \
     && /rocker_scripts/install_texlive.sh \

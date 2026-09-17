@@ -16,27 +16,27 @@ ENV PATH="$PATH:/usr/local/texlive/bin/linux"
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         texinfo \
-        tidy \
         libhdf5-dev \
-    # The `install2.r` script is available as part of the `littler` package
-    && ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r \
+    # `installDeps.r` is available under littler's installed package examples.
+    # `install2.r` is already provided by rocker/r-ver under `/rocker_scripts/bin`.
+    && ln -sf /usr/local/lib/R/site-library/littler/examples/installDeps.r /usr/local/bin/installDeps.r \
     && /rocker_scripts/install_pandoc.sh \
     && /rocker_scripts/install_texlive.sh \
     && export PATH="/usr/local/texlive/bin/linux:$PATH" \
     # Install amsfonts separately for PDF manual generation, which is checked by CRAN.
     && tlmgr install amsfonts \
-    # Set a single binary-capable repo for CRAN + Bioconductor
-    && echo "options(repos = c(CRAN = Sys.getenv('RSPM')))" >> "$(R RHOME)/etc/Rprofile.site" \
+    # Set default package repositories (RSPM and r-universe repos)
+    && echo "options(repos = c(satijalab = 'https://satijalab.r-universe.dev', bnprks = 'https://bnprks.r-universe.dev', CRAN = Sys.getenv('RSPM')))" >> "$(R RHOME)/etc/Rprofile.site" \
     && rm -rf /var/lib/apt/lists/*
 
-# Install R packages with littler scripts
-# Install `BPCells` and `presto`, both only available from specific r-universe repositories.
+# Install packages required for CI, using install2.r from littler
+# `BPCells` and `presto` are both only available from specific r-universe repositories.
 # NOTE: BPCells installation is quite slow.
 RUN install2.r --error --skipinstalled --ncpus -1 \
       -r https://bnprks.r-universe.dev \
       -r https://satijalab.r-universe.dev \
     -r ${RSPM} \
-    BiocManager devtools pak plotly remotes V8 BPCells presto
+    BiocManager devtools plotly remotes V8 BPCells presto
 
 # Set environment variables to suppress NOTEs that are accepted by CRAN, see
 # https://www.rdocumentation.org/packages/rcmdcheck/versions/1.4.0/topics/rcmdcheck

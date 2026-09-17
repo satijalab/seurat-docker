@@ -30,17 +30,13 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Install R packages with littler scripts
-RUN install2.r --error --skipinstalled --ncpus -1 \
-    -r ${RSPM} \
-    BiocManager devtools pak plotly remotes V8
-
 # Install `BPCells` and `presto`, both only available from specific r-universe repositories.
 # NOTE: BPCells installation is quite slow.
 RUN install2.r --error --skipinstalled --ncpus -1 \
       -r https://bnprks.r-universe.dev \
       -r https://satijalab.r-universe.dev \
     -r ${RSPM} \
-      BPCells presto
+    BiocManager devtools pak plotly remotes V8 BPCells presto
 
 # Set environment variables to suppress NOTEs that are accepted by CRAN, see
 # https://www.rdocumentation.org/packages/rcmdcheck/versions/1.4.0/topics/rcmdcheck

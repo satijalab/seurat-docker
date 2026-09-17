@@ -18,8 +18,9 @@ RUN apt-get update \
         texinfo \
         tidy \
         libhdf5-dev \
-    # The `install2.r` script is available as part of the `littler` package
+    # Scripts from littler are available under `/rocker_scripts/bin`.
     && ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r \
+    && ln -sf /rocker_scripts/bin/installDeps.r /usr/local/bin/installDeps.r \
     && /rocker_scripts/install_pandoc.sh \
     && /rocker_scripts/install_texlive.sh \
     && export PATH="/usr/local/texlive/bin/linux:$PATH" \

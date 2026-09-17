@@ -17,9 +17,9 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         texinfo \
         libhdf5-dev \
-    # Scripts from littler are available under `/rocker_scripts/bin`.
-    && ln -sf /rocker_scripts/bin/install2.r /usr/local/bin/install2.r \
-    && ln -sf /rocker_scripts/bin/installDeps.r /usr/local/bin/installDeps.r \
+    # `installDeps.r` is available under littler's installed package examples.
+    # `install2.r` is already provided by rocker/r-ver under `/rocker_scripts/bin`.
+    && ln -sf /usr/local/lib/R/site-library/littler/examples/installDeps.r /usr/local/bin/installDeps.r \
     && /rocker_scripts/install_pandoc.sh \
     && /rocker_scripts/install_texlive.sh \
     && export PATH="/usr/local/texlive/bin/linux:$PATH" \

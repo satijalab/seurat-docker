@@ -25,8 +25,8 @@ RUN apt-get update \
     && export PATH="/usr/local/texlive/bin/linux:$PATH" \
     # Install amsfonts separately for PDF manual generation, which is checked by CRAN.
     && tlmgr install amsfonts \
-    # Set a single binary-capable repo for CRAN + Bioconductor
-    && echo "options(repos = c(CRAN = Sys.getenv('RSPM')))" >> "$(R RHOME)/etc/Rprofile.site" \
+    # Set default package repositories (RSPM and r-universe repos)
+    && echo "options(repos = c(satijalab = 'https://satijalab.r-universe.dev', bnprks = 'https://bnprks.r-universe.dev', CRAN = Sys.getenv('RSPM')))" >> "$(R RHOME)/etc/Rprofile.site" \
     && rm -rf /var/lib/apt/lists/*
 
 # Install R packages with littler scripts
